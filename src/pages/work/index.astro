@@ -1,0 +1,28 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PostCard from '../../components/PostCard.astro';
+
+const projects = (await getCollection('projects', ({ data }) => !data.draft))
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+---
+
+<BaseLayout title="Work" description="A selection of recent work.">
+  <div class="wrap" id="work-index">
+    <h1>Work</h1>
+    {projects.length === 0 ? (
+      <p class="empty-state">Nothing here yet. Added projects will show up on this page.</p>
+    ) : (
+      <div class="grid" style="margin-top:2.5rem">
+        {projects.map((project) => (
+          <PostCard
+            href={`/work/${project.id}`}
+            title={project.data.title}
+            excerpt={project.data.description}
+            image={project.data.coverImage}
+          />
+        ))}
+      </div>
+    )}
+  </div>
+</BaseLayout>

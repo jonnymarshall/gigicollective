@@ -1,0 +1,91 @@
+---
+import { getCollection } from 'astro:content';
+import { formatDate } from '../lib/date';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PostCard from '../components/PostCard.astro';
+import site from '../data/site.json';
+import home from '../data/home.json';
+
+const latestPosts = site.showBlog && home.showLatestPosts
+  ? (await getCollection('posts', ({ data }) => !data.draft))
+      .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+      .slice(0, 3)
+  : [];
+
+const featuredWork = site.showWork && home.showFeaturedWork
+  ? (await getCollection('projects', ({ data }) => !data.draft))
+      .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+      .slice(0, 3)
+  : [];
+
+const sections = (home.sections || []).filter((s) => s.heading || s.text || s.image);
+---
+
+<BaseLayout image={home.heroImage || undefined}>
+  <section id="home-hero" class="wrap hero">
+    <p class="eyebrow">{site.tagline}</p>
+    <h1>{home.heroHeading}</h1>
+    {home.heroSubheading && <p class="lead">{home.heroSubheading}</p>}
+    {home.ctaLabel && home.ctaUrl && (
+      <p style="margin-top:1.75rem"><a class="button" href={home.ctaUrl}>{home.ctaLabel}</a></p>
+    )}
+    {home.heroImage && <img class="hero__image" src={home.heroImage} alt="" />}
+  </section>
+
+  {(home.introHeading || home.introText) && (
+    <section id="home-intro" class="wrap section">
+      {home.introHeading && <h2>{home.introHeading}</h2>}
+      {home.introText && <div class="prose"><p>{home.introText}</p></div>}
+    </section>
+  )}
+
+  {sections.map((section, i) => (
+    <section class="wrap section" id={`home-section-${i + 1}`}>
+      <div class={section.image ? `split ${i % 2 === 1 ? 'split--flip' : ''}` : 'prose'}>
+        <div>
+          {section.heading && <h2>{section.heading}</h2>}
+          {section.text && <p>{section.text}</p>}
+          {section.linkLabel && section.linkUrl && (
+            <p><a href={section.linkUrl}>{section.linkLabel}</a></p>
+          )}
+        </div>
+        {section.image && <img src={section.image} alt="" loading="lazy" />}
+      </div>
+    </section>
+  ))}
+
+  {featuredWork.length > 0 && (
+    <section id="home-work" class="wrap section">
+      <h2>{home.featuredWorkHeading}</h2>
+      <div class="grid">
+        {featuredWork.map((project) => (
+          <PostCard
+            href={`/work/${project.id}`}
+            title={project.data.title}
+            excerpt={project.data.description}
+            image={project.data.coverImage}
+          />
+        ))}
+      </div>
+      <p style="margin-top:2rem"><a href="/work">See all work</a></p>
+    </section>
+  )}
+
+  {latestPosts.length > 0 && (
+    <section id="home-posts" class="wrap section">
+      <h2>{home.latestPostsHeading}</h2>
+      <div class="grid">
+        {latestPosts.map((post) => (
+          <PostCard
+            href={`/blog/${post.id}`}
+            title={post.data.title}
+            excerpt={post.data.description}
+            image={post.data.heroImage}
+            meta={formatDate(post.data.pubDate)}
+          />
+        ))}
+      </div>
+      <p style="margin-top:2rem"><a href="/blog">Read the blog</a></p>
+    </section>
+  )}
+</BaseLayout>

@@ -1,0 +1,45 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+export async function getStaticPaths() {
+  const projects = await getCollection('projects', ({ data }) => !data.draft);
+  return projects.map((project) => ({ params: { slug: project.id }, props: { project } }));
+}
+
+const { project } = Astro.props;
+const { Content } = await render(project);
+---
+
+<BaseLayout
+  title={project.data.title}
+  description={project.data.description}
+  image={project.data.coverImage || undefined}
+  article
+>
+  <article class="wrap" id={`project-${project.id}`}>
+    <header style="margin-bottom:2.5rem">
+      <h1>{project.data.title}</h1>
+      {project.data.description && <p class="lead">{project.data.description}</p>}
+    </header>
+
+    {project.data.coverImage && (
+      <img class="hero__image" src={project.data.coverImage} alt="" style="margin-bottom:2.5rem" />
+    )}
+
+    <div class="prose"><Content /></div>
+
+    {project.data.gallery.length > 0 && (
+      <div class="gallery" style="margin-top:3rem">
+        {project.data.gallery.map((item) => (
+          <figure>
+            <img src={item.image} alt={item.caption || ''} loading="lazy" />
+            {item.caption && <figcaption>{item.caption}</figcaption>}
+          </figure>
+        ))}
+      </div>
+    )}
+
+    <p style="margin-top:3rem"><a href="/work">Back to all work</a></p>
+  </article>
+</BaseLayout>

@@ -1,0 +1,22 @@
+{
+  "heroHeading": "Welcome",
+  "heroSubheading": "Replace this with a sentence about what you do and who it is for.",
+  "heroImage": "",
+  "ctaLabel": "Get in touch",
+  "ctaUrl": "/contact",
+  "introHeading": "",
+  "introText": "",
+  "sections": [
+    {
+      "heading": "Something you offer",
+      "text": "A short paragraph describing it.",
+      "image": "",
+      "linkLabel": "",
+      "linkUrl": ""
+    }
+  ],
+  "showLatestPosts": true,
+  "latestPostsHeading": "Latest from the blog",
+  "showFeaturedWork": true,
+  "featuredWorkHeading": "Recent work"
+}

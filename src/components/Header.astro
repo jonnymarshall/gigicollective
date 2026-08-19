@@ -1,0 +1,75 @@
+---
+import { getCollection } from 'astro:content';
+import site from '../data/site.json';
+
+const navPages = (await getCollection('pages', ({ data }) => !data.draft && data.showInNav))
+  .sort((a, b) => a.data.navOrder - b.data.navOrder);
+
+const links = [
+  { href: '/', label: 'Home' },
+  ...(site.showWork ? [{ href: '/work', label: 'Work' }] : []),
+  ...(site.showBlog ? [{ href: '/blog', label: 'Blog' }] : []),
+  ...navPages.map((p) => ({ href: `/${p.id}`, label: p.data.title })),
+];
+
+const path = Astro.url.pathname.replace(/\/$/, '') || '/';
+---
+
+<header id="site-header" class="site-header">
+  <div class="wrap site-header__inner">
+    <a id="site-header-brand" class="brand" href="/">{site.title}</a>
+    <nav id="site-nav" aria-label="Main">
+      <ul>
+        {links.map((link) => (
+          <li>
+            <a
+              href={link.href}
+              aria-current={path === link.href.replace(/\/$/, '') || (link.href !== '/' && path.startsWith(link.href)) ? 'page' : undefined}
+            >{link.label}</a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<style>
+  .site-header {
+    border-bottom: 1px solid var(--color-border);
+    background: var(--color-bg);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+  .site-header__inner {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem 2rem;
+    align-items: baseline;
+    justify-content: space-between;
+    padding-block: 1.1rem;
+  }
+  .brand {
+    font-family: var(--font-heading);
+    font-size: 1.35rem;
+    font-weight: 600;
+    color: var(--color-text);
+    text-decoration: none;
+    letter-spacing: -0.01em;
+  }
+  nav ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.25rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  nav a {
+    color: var(--color-muted);
+    text-decoration: none;
+    font-size: 0.95rem;
+  }
+  nav a:hover { color: var(--color-text); }
+  nav a[aria-current='page'] { color: var(--color-text); font-weight: 500; }
+</style>

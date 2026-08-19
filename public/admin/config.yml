@@ -1,0 +1,161 @@
+# -----------------------------------------------------------------------------
+# Sveltia CMS configuration
+#
+# This file decides what the editing screens look like. The fields here must
+# stay in step with src/content.config.ts. If you add a field in one place,
+# add it in the other.
+#
+# Docs: https://sveltiacms.app/en/docs
+# -----------------------------------------------------------------------------
+
+backend:
+  name: github
+  # CHANGE THIS to your GitHub username and repository name.
+  repo: YOUR-GITHUB-USERNAME/YOUR-REPO-NAME
+  branch: main
+  # CHANGE THIS to the Cloudflare Worker URL from docs/03-cms-login-setup.md
+  base_url: https://YOUR-WORKER-NAME.YOUR-SUBDOMAIN.workers.dev
+
+# Where uploaded images are stored in the repository, and the address they are
+# served from on the live site.
+media_folder: public/images/uploads
+public_folder: /images/uploads
+
+# CHANGE THIS to the real domain. It powers the "View site" link in the editor.
+site_url: https://example.com
+
+# No preview pane. The editor is simpler without one, and the live site is one
+# click away.
+editor:
+  preview: false
+
+collections:
+  # ---------------------------------------------------------------------------
+  - name: settings
+    label: Site settings
+    description: Things that appear on every page, and the front page content.
+    files:
+      - name: site
+        label: General
+        file: src/data/site.json
+        description: Site name, contact details, and what appears in the footer.
+        fields:
+          - { name: title, label: Site name, widget: string, hint: "Shown top left on every page, and in the browser tab." }
+          - { name: tagline, label: Tagline, widget: string, hint: "A very short line that sits above the main heading on the front page." }
+          - { name: description, label: Search engine description, widget: text, hint: "One or two sentences. Google shows this under your site name in search results." }
+          - { name: email, label: Contact email address, widget: string, required: false }
+          - { name: showBlog, label: Show the Blog section, widget: boolean, default: true }
+          - { name: showWork, label: Show the Work section, widget: boolean, default: true }
+          - { name: footerText, label: Footer text, widget: string }
+          - name: social
+            label: Social links
+            widget: list
+            required: false
+            label_singular: link
+            summary: "{{fields.label}}"
+            fields:
+              - { name: label, label: Name, widget: string, hint: "For example: Instagram" }
+              - { name: url, label: Web address, widget: string, hint: "The full address, starting with https://" }
+
+      - name: home
+        label: Front page
+        file: src/data/home.json
+        description: Everything that appears on the front page.
+        fields:
+          - { name: heroHeading, label: Big heading, widget: string }
+          - { name: heroSubheading, label: Sentence under the heading, widget: text, required: false }
+          - { name: heroImage, label: Large image, widget: image, required: false, hint: "Optional. Sits below the heading. A wide landscape photo works best." }
+          - { name: ctaLabel, label: Button text, widget: string, required: false, hint: "Leave blank for no button." }
+          - { name: ctaUrl, label: Button links to, widget: string, required: false, default: "/contact", hint: "For example /contact" }
+          - { name: introHeading, label: Intro heading, widget: string, required: false }
+          - { name: introText, label: Intro paragraph, widget: text, required: false }
+          - name: sections
+            label: Front page sections
+            widget: list
+            required: false
+            label_singular: section
+            summary: "{{fields.heading}}"
+            fields:
+              - { name: heading, label: Heading, widget: string }
+              - { name: text, label: Text, widget: text, required: false }
+              - { name: image, label: Image, widget: image, required: false }
+              - { name: linkLabel, label: Link text, widget: string, required: false }
+              - { name: linkUrl, label: Link goes to, widget: string, required: false }
+          - { name: showLatestPosts, label: Show latest blog posts on the front page, widget: boolean, default: true }
+          - { name: latestPostsHeading, label: Heading above the blog posts, widget: string, default: "Latest from the blog" }
+          - { name: showFeaturedWork, label: Show recent work on the front page, widget: boolean, default: true }
+          - { name: featuredWorkHeading, label: Heading above the work, widget: string, default: "Recent work" }
+
+  # ---------------------------------------------------------------------------
+  - name: pages
+    label: Pages
+    label_singular: page
+    description: Standalone pages such as About, Services, or Contact.
+    folder: src/content/pages
+    create: true
+    slug: "{{slug}}"
+    extension: md
+    format: frontmatter
+    summary: "{{title}}"
+    sortable_fields: [navOrder, title]
+    fields:
+      - { name: title, label: Page title, widget: string }
+      - { name: description, label: Short summary, widget: text, required: false, hint: "One sentence. Used by Google, and shown under the title on the page." }
+      - { name: heroImage, label: Header image, widget: image, required: false }
+      - { name: showInNav, label: Show in the top menu, widget: boolean, default: true }
+      - { name: navOrder, label: Menu position, widget: number, default: 0, value_type: int, hint: "Lower numbers appear further left." }
+      - { name: draft, label: Draft, widget: boolean, default: false, hint: "Turn on to hide this page from the live site while you work on it." }
+      - { name: body, label: Page content, widget: markdown }
+
+  # ---------------------------------------------------------------------------
+  - name: posts
+    label: Blog posts
+    label_singular: post
+    description: Dated articles that appear on the blog.
+    folder: src/content/posts
+    create: true
+    slug: "{{slug}}"
+    extension: md
+    format: frontmatter
+    summary: "{{title}}"
+    sortable_fields: [pubDate, title]
+    view_filters:
+      - { label: Drafts, field: draft, pattern: true }
+    fields:
+      - { name: title, label: Title, widget: string }
+      - { name: description, label: Short summary, widget: text, required: false, hint: "One or two sentences. Shown in the blog list and in Google results." }
+      - { name: pubDate, label: Date published, widget: datetime, date_format: "DD/MM/YYYY", time_format: false, picker_utc: true }
+      - { name: updatedDate, label: Date updated, widget: datetime, date_format: "DD/MM/YYYY", time_format: false, picker_utc: true, required: false }
+      - { name: heroImage, label: Header image, widget: image, required: false }
+      - { name: tags, label: Tags, widget: list, required: false, default: [], hint: "Optional. Group related posts together." }
+      - { name: draft, label: Draft, widget: boolean, default: false, hint: "Turn on to keep this off the live site while you work on it." }
+      - { name: body, label: Post content, widget: markdown }
+
+  # ---------------------------------------------------------------------------
+  - name: projects
+    label: Work
+    label_singular: project
+    description: Projects, case studies, or photo galleries.
+    folder: src/content/projects
+    create: true
+    slug: "{{slug}}"
+    extension: md
+    format: frontmatter
+    summary: "{{title}}"
+    sortable_fields: [date, title]
+    fields:
+      - { name: title, label: Title, widget: string }
+      - { name: description, label: Short summary, widget: text, required: false }
+      - { name: coverImage, label: Cover image, widget: image, required: false, hint: "The picture shown in the Work list." }
+      - { name: date, label: Date, widget: datetime, date_format: "DD/MM/YYYY", time_format: false, picker_utc: true }
+      - { name: draft, label: Draft, widget: boolean, default: false }
+      - { name: body, label: Description, widget: markdown, required: false }
+      - name: gallery
+        label: Photo gallery
+        widget: list
+        required: false
+        label_singular: photo
+        summary: "{{fields.caption}}"
+        fields:
+          - { name: image, label: Photo, widget: image }
+          - { name: caption, label: Caption, widget: string, required: false }

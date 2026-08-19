@@ -1,0 +1,21 @@
+---
+interface Props {
+  href: string;
+  title: string;
+  excerpt?: string;
+  image?: string;
+  meta?: string;
+}
+const { href, title, excerpt, image, meta } = Astro.props;
+---
+
+<article class="card">
+  <a href={href}>
+    {image && <img class="card__image" src={image} alt="" loading="lazy" />}
+    <div class="card__body">
+      <h3 class="card__title">{title}</h3>
+      {meta && <p class="card__meta">{meta}</p>}
+      {excerpt && <p class="card__excerpt">{excerpt}</p>}
+    </div>
+  </a>
+</article>

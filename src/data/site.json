@@ -1,0 +1,12 @@
+{
+  "title": "Her Site",
+  "tagline": "A short line about what this site is",
+  "description": "Used by Google and by social media previews when a page has no description of its own.",
+  "email": "hello@example.com",
+  "showBlog": true,
+  "showWork": true,
+  "footerText": "© Her Site. All rights reserved.",
+  "social": [
+    { "label": "Instagram", "url": "https://instagram.com/" }
+  ]
+}

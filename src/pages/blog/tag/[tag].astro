@@ -1,0 +1,51 @@
+---
+import { getCollection, type CollectionEntry } from 'astro:content';
+import { formatDate } from '../../../lib/date';
+import { slugify } from '../../../lib/slug';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import PostCard from '../../../components/PostCard.astro';
+
+type Post = CollectionEntry<'posts'>;
+
+export async function getStaticPaths() {
+  const posts = await getCollection('posts', ({ data }) => !data.draft);
+  const tags = new Map<string, { label: string; posts: Post[] }>();
+
+  for (const post of posts) {
+    for (const tag of post.data.tags) {
+      const slug = slugify(tag);
+      if (!tags.has(slug)) tags.set(slug, { label: tag, posts: [] });
+      tags.get(slug)!.posts.push(post);
+    }
+  }
+
+  return [...tags.entries()].map(([slug, { label, posts }]) => ({
+    params: { tag: slug },
+    props: {
+      label,
+      posts: posts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()),
+    },
+  }));
+}
+
+const { label, posts } = Astro.props;
+---
+
+<BaseLayout title={`Tagged “${label}”`} description={`Posts tagged ${label}.`}>
+  <div class="wrap" id="tag-index">
+    <p class="eyebrow">Tag</p>
+    <h1>{label}</h1>
+    <div class="grid" style="margin-top:2.5rem">
+      {posts.map((post) => (
+        <PostCard
+          href={`/blog/${post.id}`}
+          title={post.data.title}
+          excerpt={post.data.description}
+          image={post.data.heroImage}
+          meta={formatDate(post.data.pubDate)}
+        />
+      ))}
+    </div>
+    <p style="margin-top:2.5rem"><a href="/blog">Back to all posts</a></p>
+  </div>
+</BaseLayout>

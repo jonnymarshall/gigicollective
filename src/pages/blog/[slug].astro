@@ -1,0 +1,47 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import FormattedDate from '../../components/FormattedDate.astro';
+import { slugify } from '../../lib/slug';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('posts', ({ data }) => !data.draft);
+  return posts.map((post) => ({ params: { slug: post.id }, props: { post } }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+---
+
+<BaseLayout
+  title={post.data.title}
+  description={post.data.description}
+  image={post.data.heroImage || undefined}
+  article
+>
+  <article class="wrap" id={`post-${post.id}`}>
+    <header style="margin-bottom:2.5rem">
+      <p class="eyebrow"><FormattedDate date={post.data.pubDate} /></p>
+      <h1>{post.data.title}</h1>
+      {post.data.description && <p class="lead">{post.data.description}</p>}
+    </header>
+
+    {post.data.heroImage && (
+      <img class="hero__image" src={post.data.heroImage} alt="" style="margin-bottom:2.5rem" />
+    )}
+
+    <div class="prose"><Content /></div>
+
+    {post.data.tags.length > 0 && (
+      <ul class="tag-list" style="margin-top:3rem">
+        {post.data.tags.map((tag) => <li><a href={`/blog/tag/${slugify(tag)}`}>{tag}</a></li>)}
+      </ul>
+    )}
+
+    {post.data.updatedDate && (
+      <p style="margin-top:2rem;font-size:0.9rem;color:var(--color-muted)">
+        Updated <FormattedDate date={post.data.updatedDate} />
+      </p>
+    )}
+  </article>
+</BaseLayout>
