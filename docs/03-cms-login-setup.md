@@ -153,22 +153,51 @@ website. Do not put them in the repo, do not email them, do not paste them into 
 
 > **You.** Your Cloudflare account.
 
-1. **Workers & Pages** → click `sveltia-cms-auth` → **Settings** → **Variables and Secrets**
-2. Add these three:
+1. **Workers & Pages** → click `sveltia-cms-auth` → **Settings**
 
-| Name | Value | Type |
-|---|---|---|
-| `GITHUB_CLIENT_ID` | the Client ID from 2b | Plain text |
-| `GITHUB_CLIENT_SECRET` | the client secret from 2b | **Secret** (encrypted) |
-| `ALLOWED_DOMAINS` | `gigicollective.com` | Plain text |
+2. **There are two sections on this page both called "Variables and secrets".** Only one of
+   them works.
 
-Set the secret as type **Secret**, not plain text, so Cloudflare encrypts it and stops
-displaying it back to you.
+   | Which | Where it is | Use it? |
+   |---|---|---|
+   | **Variables and secrets** | The **first** section, at the very top of the page. Its empty state reads "Configure API tokens and other runtime variables", and the table has a **Type** column. | **Yes, this one.** |
+   | Variables and secrets | Nested **inside the Build section**, further down, next to Deploy Hooks and Build cache. Its empty state reads "No build variables or secrets configured". | No. |
 
-`ALLOWED_DOMAINS` matters. Without it, anyone who found the worker address could point their
-own editing page at it. With it, the login only works when the request comes from your domain.
+   The second one only exists while the deploy command is running. Values put there are
+   invisible to the running Worker, and sign-in will fail with nothing obvious to point at.
 
-3. Save, then **Deploy** so the new values take effect.
+   If the Add dialog you are looking at offers only a key and a value with no **Type**
+   choice, you are in the Build one. Scroll back to the top of the page.
+
+3. In the top section, click **Add variable** and add these three. **Set all three to type
+   `Secret`**, not Text:
+
+| Name | Value |
+|---|---|
+| `GITHUB_CLIENT_ID` | the Client ID from 2b |
+| `GITHUB_CLIENT_SECRET` | the client secret from 2b |
+| `ALLOWED_DOMAINS` | `gigicollective.com` |
+
+Why all three as Secret, when only one is really sensitive: Cloudflare preserves secrets
+across deploys ("Secrets not included in the file are preserved from the previous version"),
+but plain text variables are expected to come from `wrangler.toml`. This project's
+`wrangler.toml` declares none, and the Worker now redeploys automatically on every push to
+its repo. A plain text value set here could be wiped by one of those redeploys. Secret type
+costs nothing and survives. The Worker reads both kinds identically.
+
+`ALLOWED_DOMAINS` is what stops anyone who finds the worker address from pointing their own
+editing page at it. The login only works when the request comes from a domain listed here.
+
+**To test before the domain has moved,** list both, comma separated and no spaces:
+
+```
+gigicollective.com,jonnymarshall.github.io
+```
+
+That lets you sign in at `jonnymarshall.github.io/gigicollective/admin/` while DNS still
+points at HostGator. Remove the github.io half once the real domain is live.
+
+4. Save, then **Deploy** so the new values take effect.
 
 ## 2d. Point the editor at the helper
 
