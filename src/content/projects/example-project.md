@@ -1,6 +1,7 @@
 ---
-title: An example project
-description: A short line describing this piece of work.
+title: Gigi's awesome thing
+description: Gigi's awesome thing. Gigi's awesome thing. Gigi's awesome thing. Gigi's awesome thing. Gigi's awesome thing. Gigi's awesome thing.
+coverImage: ''
 date: 2026-08-19
 draft: false
 gallery: []
