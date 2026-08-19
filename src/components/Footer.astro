@@ -1,39 +1,54 @@
 ---
+import { getCollection } from 'astro:content';
 import { site } from '../lib/site-data';
+
+const navPages = (await getCollection('pages', ({ data }) => !data.draft && data.showInNav))
+  .sort((a, b) => a.data.navOrder - b.data.navOrder);
+
+const navigation = [
+  { href: '/', label: 'Home' },
+  ...(site.showWork ? [{ href: '/work', label: 'Work' }] : []),
+  ...(site.showBlog ? [{ href: '/blog', label: 'Journal' }] : []),
+  ...navPages.map((p) => ({ href: `/${p.id}`, label: p.data.title })),
+];
+
+const year = new Date().getFullYear();
 ---
 
 <footer id="site-footer" class="site-footer">
-  <div class="wrap site-footer__inner">
-    <p id="site-footer-text">{site.footerText}</p>
-    {(site.social?.length || site.email) && (
-      <ul id="site-footer-links">
-        {site.email && (
-          <li><a href={`mailto:${site.email}`}>{site.email}</a></li>
+  <div class="wrap">
+    <div class="site-footer__top">
+      <div>
+        <a class="brand" href="/">
+          <span class="brand__name">{site.title}</span>
+          {site.tagline && <span class="brand__tag">{site.tagline}</span>}
+        </a>
+        {site.description && (
+          <p style="margin-top:1.5rem;max-width:32ch">{site.description}</p>
         )}
-        {site.social?.map((item) => (
-          <li><a href={item.url} rel="me noopener" target="_blank">{item.label}</a></li>
-        ))}
-      </ul>
-    )}
+      </div>
+
+      <div>
+        <h4>Navigation</h4>
+        <ul>
+          {navigation.map((link) => <li><a href={link.href}>{link.label}</a></li>)}
+        </ul>
+      </div>
+
+      <div>
+        <h4>Get in touch</h4>
+        <ul>
+          {site.email && <li><a href={`mailto:${site.email}`}>{site.email}</a></li>}
+          {site.social?.map((item) => (
+            <li><a href={item.url} rel="me noopener" target="_blank">{item.label}</a></li>
+          ))}
+        </ul>
+      </div>
+    </div>
+
+    <div class="site-footer__bottom">
+      <p id="site-footer-text" style="margin:0">{site.footerText || `© ${year} ${site.title}`}</p>
+      <p style="margin:0"><a href="/rss.xml">RSS</a></p>
+    </div>
   </div>
 </footer>
-
-<style>
-  .site-footer {
-    border-top: 1px solid var(--color-border);
-    padding-block: 2rem;
-    font-size: 0.9rem;
-    color: var(--color-muted);
-  }
-  .site-footer__inner {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem 2rem;
-    justify-content: space-between;
-    align-items: center;
-  }
-  .site-footer p { margin: 0; }
-  ul { display: flex; gap: 1.25rem; list-style: none; margin: 0; padding: 0; }
-  a { color: var(--color-muted); }
-  a:hover { color: var(--color-accent); }
-</style>

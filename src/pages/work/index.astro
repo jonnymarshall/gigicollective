@@ -7,22 +7,30 @@ const projects = (await getCollection('projects', ({ data }) => !data.draft))
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
 ---
 
-<BaseLayout title="Work" description="A selection of recent work.">
-  <div class="wrap" id="work-index">
-    <h1>Work</h1>
-    {projects.length === 0 ? (
-      <p class="empty-state">Nothing here yet. Added projects will show up on this page.</p>
-    ) : (
-      <div class="grid" style="margin-top:2.5rem">
-        {projects.map((project) => (
-          <PostCard
-            href={`/work/${project.id}`}
-            title={project.data.title}
-            excerpt={project.data.description}
-            image={project.data.coverImage}
-          />
-        ))}
-      </div>
-    )}
-  </div>
+<BaseLayout title="Work" description="A collection of thoughtful spaces." overlayHeader>
+  <header class="page-head">
+    <div class="wrap">
+      <p class="eyebrow">Projects</p>
+      <h1 class="display">Selected work</h1>
+    </div>
+  </header>
+
+  <section class="band band--bg" id="work-index">
+    <div class="wrap">
+      {projects.length === 0 ? (
+        <p class="empty-state">Nothing here yet. Added projects will show up on this page.</p>
+      ) : (
+        <div class="grid">
+          {projects.map((project) => (
+            <PostCard
+              href={`/work/${project.id}`}
+              title={project.data.title}
+              excerpt={project.data.description}
+              image={project.data.coverImage}
+            />
+          ))}
+        </div>
+      )}
+    </div>
+  </section>
 </BaseLayout>

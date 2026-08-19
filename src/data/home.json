@@ -1,22 +1,27 @@
 {
-  "heroHeading": "Welcome",
-  "heroSubheading": "Replace this with a sentence about what you do and who it is for.",
+  "heroEyebrow": "Architecture. Interiors. Intentional design.",
+  "heroHeading": "Spaces that inspire living",
+  "heroSubheading": "Creating timeless spaces that are beautiful, functional, and deeply personal.",
   "heroImage": "",
-  "ctaLabel": "Get in touch",
-  "ctaUrl": "/contact",
-  "introHeading": "",
-  "introText": "",
-  "sections": [
-    {
-      "heading": "Something you offer",
-      "text": "A short paragraph describing it.",
-      "image": "",
-      "linkLabel": "",
-      "linkUrl": ""
-    }
-  ],
+  "ctaLabel": "View our work",
+  "ctaUrl": "/work",
+  "introEyebrow": "About",
+  "introHeading": "Designing with purpose. Creating lasting impact.",
+  "introText": "We believe great design is more than aesthetics. It is about how a space makes you feel, and how it enhances the way you live. Our approach is collaborative, refined, and rooted in timeless elegance.",
+  "introImage": "",
+  "introLinkLabel": "Our philosophy",
+  "introLinkUrl": "/about",
+  "sections": [],
   "showLatestPosts": true,
-  "latestPostsHeading": "Latest from the blog",
+  "latestPostsHeading": "From the journal",
+  "latestPostsEyebrow": "Journal",
   "showFeaturedWork": true,
-  "featuredWorkHeading": "Recent work"
+  "featuredWorkHeading": "A collection of thoughtful spaces",
+  "featuredWorkEyebrow": "Featured projects",
+  "closingEyebrow": "Inquire",
+  "closingHeading": "Let's create something beautiful",
+  "closingText": "We would love to hear about your project. Reach out to start a conversation.",
+  "closingButtonLabel": "Get in touch",
+  "closingButtonUrl": "/contact",
+  "closingImage": ""
 }

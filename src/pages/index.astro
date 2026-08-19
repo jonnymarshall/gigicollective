@@ -1,8 +1,8 @@
 ---
 import { getCollection } from 'astro:content';
-import { formatDate } from '../lib/date';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PostCard from '../components/PostCard.astro';
+import { formatDate } from '../lib/date';
 import { site, home } from '../lib/site-data';
 
 const latestPosts = site.showBlog && home.showLatestPosts
@@ -14,77 +14,141 @@ const latestPosts = site.showBlog && home.showLatestPosts
 const featuredWork = site.showWork && home.showFeaturedWork
   ? (await getCollection('projects', ({ data }) => !data.draft))
       .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
-      .slice(0, 3)
+      .slice(0, 4)
   : [];
 
 const sections = (home.sections || []).filter((s) => s.heading || s.text || s.image);
+const hasIntro = Boolean(home.introHeading || home.introText);
 ---
 
-<BaseLayout image={home.heroImage || undefined}>
-  <section id="home-hero" class="wrap hero">
-    <p class="eyebrow">{site.tagline}</p>
-    <h1>{home.heroHeading}</h1>
-    {home.heroSubheading && <p class="lead">{home.heroSubheading}</p>}
-    {home.ctaLabel && home.ctaUrl && (
-      <p style="margin-top:1.75rem"><a class="button" href={home.ctaUrl}>{home.ctaLabel}</a></p>
-    )}
-    {home.heroImage && <img class="hero__image" src={home.heroImage} alt="" />}
+<BaseLayout image={home.heroImage || undefined} overlayHeader>
+  <!-- Hero -->
+  <section id="home-hero" class="hero">
+    {home.heroImage && <img class="hero__media" src={home.heroImage} alt="" />}
+    <div class="hero__inner">
+      <div class="wrap">
+        <div class="hero__content">
+          <h1 class="display">{home.heroHeading}</h1>
+          {home.heroEyebrow && <p class="eyebrow" style="margin-top:1.5rem">{home.heroEyebrow}</p>}
+          {home.heroSubheading && <p style="max-width:26rem">{home.heroSubheading}</p>}
+          {home.ctaLabel && home.ctaUrl && (
+            <a class="button" href={home.ctaUrl}>{home.ctaLabel}</a>
+          )}
+        </div>
+      </div>
+    </div>
   </section>
 
-  {(home.introHeading || home.introText) && (
-    <section id="home-intro" class="wrap section">
-      {home.introHeading && <h2>{home.introHeading}</h2>}
-      {home.introText && <div class="prose"><p>{home.introText}</p></div>}
+  <!-- Introduction -->
+  {hasIntro && (
+    <section id="home-intro" class="band band--bg">
+      <div class="wrap">
+        <!-- Without an image there is nothing to sit in the other column, so
+             drop to a single column rather than leaving half the row empty. -->
+        <div class={home.introImage ? 'split' : ''}>
+          {home.introImage && <img src={home.introImage} alt="" loading="lazy" />}
+          <div>
+            {home.introEyebrow && <p class="eyebrow">{home.introEyebrow}</p>}
+            {home.introHeading && <h2>{home.introHeading}</h2>}
+            {home.introText && <p class="lead" style="margin-top:1.5rem">{home.introText}</p>}
+            {home.introLinkLabel && home.introLinkUrl && (
+              <p style="margin-top:2rem">
+                <a class="button button--ghost" href={home.introLinkUrl}>{home.introLinkLabel}</a>
+              </p>
+            )}
+          </div>
+        </div>
+      </div>
     </section>
   )}
 
+  <!-- Free-form sections, alternating bands and image sides -->
   {sections.map((section, i) => (
-    <section class="wrap section" id={`home-section-${i + 1}`}>
-      <div class={section.image ? `split ${i % 2 === 1 ? 'split--flip' : ''}` : 'prose'}>
-        <div>
-          {section.heading && <h2>{section.heading}</h2>}
-          {section.text && <p>{section.text}</p>}
-          {section.linkLabel && section.linkUrl && (
-            <p><a href={section.linkUrl}>{section.linkLabel}</a></p>
-          )}
+    <section class={`band ${i % 2 === 0 ? 'band--tint' : 'band--bg'}`} id={`home-section-${i + 1}`}>
+      <div class="wrap">
+        <div class={section.image ? `split ${i % 2 === 1 ? 'split--flip' : ''}` : 'prose'}>
+          <div>
+            {section.heading && <h2>{section.heading}</h2>}
+            {section.text && <p style="margin-top:1.25rem">{section.text}</p>}
+            {section.linkLabel && section.linkUrl && (
+              <p style="margin-top:2rem">
+                <a class="button button--ghost" href={section.linkUrl}>{section.linkLabel}</a>
+              </p>
+            )}
+          </div>
+          {section.image && <img src={section.image} alt="" loading="lazy" />}
         </div>
-        {section.image && <img src={section.image} alt="" loading="lazy" />}
       </div>
     </section>
   ))}
 
+  <!-- Featured work -->
   {featuredWork.length > 0 && (
-    <section id="home-work" class="wrap section">
-      <h2>{home.featuredWorkHeading}</h2>
-      <div class="grid">
-        {featuredWork.map((project) => (
-          <PostCard
-            href={`/work/${project.id}`}
-            title={project.data.title}
-            excerpt={project.data.description}
-            image={project.data.coverImage}
-          />
-        ))}
+    <section id="home-work" class="band band--tint">
+      <div class="wrap">
+        <div class="aside-grid" style="align-items:end;margin-bottom:3rem">
+          <div>
+            {home.featuredWorkEyebrow && <p class="eyebrow">{home.featuredWorkEyebrow}</p>}
+            <h2 style="margin:0">{home.featuredWorkHeading}</h2>
+            <p style="margin-top:1.75rem">
+              <a class="button button--ghost" href="/work">View all projects</a>
+            </p>
+          </div>
+          <div class="grid">
+            {featuredWork.map((project) => (
+              <PostCard
+                href={`/work/${project.id}`}
+                title={project.data.title}
+                excerpt={project.data.description}
+                image={project.data.coverImage}
+              />
+            ))}
+          </div>
+        </div>
       </div>
-      <p style="margin-top:2rem"><a href="/work">See all work</a></p>
     </section>
   )}
 
+  <!-- Journal -->
   {latestPosts.length > 0 && (
-    <section id="home-posts" class="wrap section">
-      <h2>{home.latestPostsHeading}</h2>
-      <div class="grid">
-        {latestPosts.map((post) => (
-          <PostCard
-            href={`/blog/${post.id}`}
-            title={post.data.title}
-            excerpt={post.data.description}
-            image={post.data.heroImage}
-            meta={formatDate(post.data.pubDate)}
-          />
-        ))}
+    <section id="home-posts" class="band band--bg">
+      <div class="wrap">
+        {home.latestPostsEyebrow && <p class="eyebrow">{home.latestPostsEyebrow}</p>}
+        <h2 style="margin-bottom:3rem">{home.latestPostsHeading}</h2>
+        <div class="grid">
+          {latestPosts.map((post) => (
+            <PostCard
+              href={`/blog/${post.id}`}
+              title={post.data.title}
+              excerpt={post.data.description}
+              image={post.data.heroImage}
+              meta={formatDate(post.data.pubDate)}
+            />
+          ))}
+        </div>
+        <p style="margin-top:3rem"><a class="button button--ghost" href="/blog">Read the journal</a></p>
       </div>
-      <p style="margin-top:2rem"><a href="/blog">Read the blog</a></p>
+    </section>
+  )}
+
+  <!-- Closing call to action -->
+  {home.closingHeading && (
+    <section id="home-closing" class="band band--dark">
+      <div class="wrap">
+        <div class={home.closingImage ? 'split' : ''}>
+          {home.closingImage && <img src={home.closingImage} alt="" loading="lazy" />}
+          <div>
+            {home.closingEyebrow && <p class="eyebrow">{home.closingEyebrow}</p>}
+            <h2>{home.closingHeading}</h2>
+            {home.closingText && <p class="lead" style="margin-top:1.5rem">{home.closingText}</p>}
+            {home.closingButtonLabel && home.closingButtonUrl && (
+              <p style="margin-top:2rem">
+                <a class="button" href={home.closingButtonUrl}>{home.closingButtonLabel}</a>
+              </p>
+            )}
+          </div>
+        </div>
+      </div>
     </section>
   )}
 </BaseLayout>

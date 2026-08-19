@@ -1,11 +1,18 @@
 ---
 import { renderMarkdown } from '../../lib/markdown';
-interface Props { heading?: string; text?: string; width?: string }
-const { heading, text, width = 'narrow' } = Astro.props;
+interface Props { eyebrow?: string; heading?: string; text?: string; width?: string; background?: string }
+const { eyebrow, heading, text, width = 'narrow', background = 'bg' } = Astro.props;
 ---
-<section class={`block block--text block--${width}`}>
+<section class={`band band--${background} block--text`}>
   <div class="wrap">
-    {heading && <h2>{heading}</h2>}
-    {text && <div class="prose" set:html={renderMarkdown(text)} />}
+    <div class="aside-grid">
+      <div>
+        {eyebrow && <p class="eyebrow">{eyebrow}</p>}
+        {heading && <h2>{heading}</h2>}
+      </div>
+      {text && (
+        <div class={width === 'narrow' ? 'prose' : ''} set:html={renderMarkdown(text)} />
+      )}
+    </div>
   </div>
 </section>

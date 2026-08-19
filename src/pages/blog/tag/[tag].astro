@@ -31,21 +31,28 @@ export async function getStaticPaths() {
 const { label, posts } = Astro.props;
 ---
 
-<BaseLayout title={`Tagged “${label}”`} description={`Posts tagged ${label}.`}>
-  <div class="wrap" id="tag-index">
-    <p class="eyebrow">Tag</p>
-    <h1>{label}</h1>
-    <div class="grid" style="margin-top:2.5rem">
-      {posts.map((post) => (
-        <PostCard
-          href={`/blog/${post.id}`}
-          title={post.data.title}
-          excerpt={post.data.description}
-          image={post.data.heroImage}
-          meta={formatDate(post.data.pubDate)}
-        />
-      ))}
+<BaseLayout title={`Tagged ${label}`} description={`Posts tagged ${label}.`} overlayHeader>
+  <header class="page-head">
+    <div class="wrap">
+      <p class="eyebrow">Tag</p>
+      <h1 class="display">{label}</h1>
     </div>
-    <p style="margin-top:2.5rem"><a href="/blog">Back to all posts</a></p>
-  </div>
+  </header>
+
+  <section class="band band--bg" id="tag-index">
+    <div class="wrap">
+      <div class="grid">
+        {posts.map((post) => (
+          <PostCard
+            href={`/blog/${post.id}`}
+            title={post.data.title}
+            excerpt={post.data.description}
+            image={post.data.heroImage}
+            meta={formatDate(post.data.pubDate)}
+          />
+        ))}
+      </div>
+      <p style="margin-top:3rem"><a class="button button--ghost" href="/blog">All posts</a></p>
+    </div>
+  </section>
 </BaseLayout>

@@ -33,18 +33,35 @@ export interface HomeSection {
 }
 
 export interface Home {
+  heroEyebrow?: string;
   heroHeading: string;
   heroSubheading?: string;
   heroImage?: string;
   ctaLabel?: string;
   ctaUrl?: string;
+
+  introEyebrow?: string;
   introHeading?: string;
   introText?: string;
+  introImage?: string;
+  introLinkLabel?: string;
+  introLinkUrl?: string;
+
   sections: HomeSection[];
+
   showLatestPosts: boolean;
   latestPostsHeading: string;
+  latestPostsEyebrow?: string;
   showFeaturedWork: boolean;
   featuredWorkHeading: string;
+  featuredWorkEyebrow?: string;
+
+  closingEyebrow?: string;
+  closingHeading?: string;
+  closingText?: string;
+  closingButtonLabel?: string;
+  closingButtonUrl?: string;
+  closingImage?: string;
 }
 
 export const site = siteJson as Site;

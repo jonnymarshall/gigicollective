@@ -1,20 +1,31 @@
 ---
 interface Feature { title: string; text?: string; image?: string }
-interface Props { heading?: string; items?: Feature[] }
-const { heading, items = [] } = Astro.props;
+interface Props {
+  eyebrow?: string; heading?: string; items?: Feature[];
+  numbered?: boolean; background?: string;
+}
+const { eyebrow, heading, items = [], numbered = false, background = 'tint' } = Astro.props;
 ---
 {items.length > 0 && (
-  <section class="block block--features">
+  <section class={`band band--${background} block--features`}>
     <div class="wrap">
-      {heading && <h2>{heading}</h2>}
-      <div class="feature-grid">
-        {items.map((item) => (
-          <div class="feature">
-            {item.image && <img src={item.image} alt="" loading="lazy" />}
-            <h3>{item.title}</h3>
-            {item.text && <p>{item.text}</p>}
-          </div>
-        ))}
+      <div class="aside-grid">
+        <div>
+          {eyebrow && <p class="eyebrow">{eyebrow}</p>}
+          {heading && <h2>{heading}</h2>}
+          <hr class="rule" />
+        </div>
+        <div class="column-set">
+          {items.map((item, i) => (
+            <div>
+              {numbered
+                ? <span class="column-set__num">{String(i + 1).padStart(2, '0')}</span>
+                : item.image && <img class="column-set__icon" src={item.image} alt="" loading="lazy" />}
+              <h3>{item.title}</h3>
+              {item.text && <p>{item.text}</p>}
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   </section>

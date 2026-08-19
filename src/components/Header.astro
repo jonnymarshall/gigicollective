@@ -2,74 +2,98 @@
 import { getCollection } from 'astro:content';
 import { site } from '../lib/site-data';
 
+interface Props {
+  /** Transparent and overlaid on a hero, or solid on its own dark bar. */
+  overlay?: boolean;
+}
+const { overlay = false } = Astro.props;
+
 const navPages = (await getCollection('pages', ({ data }) => !data.draft && data.showInNav))
   .sort((a, b) => a.data.navOrder - b.data.navOrder);
 
 const links = [
   { href: '/', label: 'Home' },
   ...(site.showWork ? [{ href: '/work', label: 'Work' }] : []),
-  ...(site.showBlog ? [{ href: '/blog', label: 'Blog' }] : []),
+  ...(site.showBlog ? [{ href: '/blog', label: 'Journal' }] : []),
   ...navPages.map((p) => ({ href: `/${p.id}`, label: p.data.title })),
 ];
 
 const path = Astro.url.pathname.replace(/\/$/, '') || '/';
+const isCurrent = (href: string) =>
+  path === href.replace(/\/$/, '') || (href !== '/' && path.startsWith(href));
+
+// The corner button points at whichever page looks like the contact page, and
+// that page is dropped from the inline links so it does not appear twice.
+const contact = navPages.find((p) => /contact|enquir|inquir|book/i.test(p.id));
+const navLinks = contact ? links.filter((l) => l.href !== `/${contact.id}`) : links;
 ---
 
-<header id="site-header" class="site-header">
+<header id="site-header" class:list={['site-header', { 'site-header--solid': !overlay }]}>
   <div class="wrap site-header__inner">
-    <a id="site-header-brand" class="brand" href="/">{site.title}</a>
-    <nav id="site-nav" aria-label="Main">
+    <a id="site-header-brand" class="brand" href="/">
+      <span class="brand__name">{site.title}</span>
+      {site.tagline && <span class="brand__tag">{site.tagline}</span>}
+    </a>
+
+    <nav id="site-nav" class="site-nav" aria-label="Main">
       <ul>
-        {links.map((link) => (
+        {navLinks.map((link) => (
           <li>
-            <a
-              href={link.href}
-              aria-current={path === link.href.replace(/\/$/, '') || (link.href !== '/' && path.startsWith(link.href)) ? 'page' : undefined}
-            >{link.label}</a>
+            <a href={link.href} aria-current={isCurrent(link.href) ? 'page' : undefined}>{link.label}</a>
           </li>
         ))}
       </ul>
+
+      {contact && <a class="button button--ghost" href={`/${contact.id}`}>{contact.data.title}</a>}
+
+      <button
+        id="menu-toggle"
+        class="menu-toggle"
+        type="button"
+        aria-expanded="false"
+        aria-controls="mobile-menu"
+      >
+        <span class="menu-toggle__bar" aria-hidden="true"></span>
+        <span class="menu-toggle__label">Menu</span>
+      </button>
     </nav>
+  </div>
+
+  <div id="mobile-menu" class="mobile-menu" hidden>
+    <ul>
+      {links.map((link) => (
+        <li>
+          <a href={link.href} aria-current={isCurrent(link.href) ? 'page' : undefined}>{link.label}</a>
+        </li>
+      ))}
+    </ul>
   </div>
 </header>
 
-<style>
-  .site-header {
-    border-bottom: 1px solid var(--color-border);
-    background: var(--color-bg);
-    position: sticky;
-    top: 0;
-    z-index: 10;
+<script>
+  // Plain DOM, no framework. The menu starts hidden so that if this script
+  // fails to run it stays closed rather than sitting open over the page.
+  const toggle = document.getElementById('menu-toggle');
+  const menu = document.getElementById('mobile-menu') as HTMLElement | null;
+
+  if (toggle && menu) {
+    const setOpen = (open: boolean) => {
+      toggle.setAttribute('aria-expanded', String(open));
+      menu.hidden = !open;
+      document.body.style.overflow = open ? 'hidden' : '';
+    };
+
+    toggle.addEventListener('click', () => {
+      setOpen(toggle.getAttribute('aria-expanded') !== 'true');
+    });
+
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') setOpen(false);
+    });
+
+    // Following a link should close the menu behind you.
+    menu.addEventListener('click', (event) => {
+      if ((event.target as HTMLElement).closest('a')) setOpen(false);
+    });
   }
-  .site-header__inner {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.75rem 2rem;
-    align-items: baseline;
-    justify-content: space-between;
-    padding-block: 1.1rem;
-  }
-  .brand {
-    font-family: var(--font-heading);
-    font-size: 1.35rem;
-    font-weight: 600;
-    color: var(--color-text);
-    text-decoration: none;
-    letter-spacing: -0.01em;
-  }
-  nav ul {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1.25rem;
-    list-style: none;
-    margin: 0;
-    padding: 0;
-  }
-  nav a {
-    color: var(--color-muted);
-    text-decoration: none;
-    font-size: 0.95rem;
-  }
-  nav a:hover { color: var(--color-text); }
-  nav a[aria-current='page'] { color: var(--color-text); font-weight: 500; }
-</style>
+</script>

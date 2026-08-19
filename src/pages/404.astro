@@ -1,11 +1,13 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 ---
-<BaseLayout title="Page not found">
-  <div class="wrap" id="not-found">
-    <p class="eyebrow">404</p>
-    <h1>That page does not exist</h1>
-    <p class="lead">It may have been moved or renamed.</p>
-    <p style="margin-top:1.5rem"><a class="button" href="/">Go to the home page</a></p>
-  </div>
+<BaseLayout title="Page not found" overlayHeader>
+  <header class="page-head" id="not-found">
+    <div class="wrap">
+      <p class="eyebrow">404</p>
+      <h1 class="display">That page does not exist</h1>
+      <p class="lead" style="margin-top:1.5rem">It may have been moved or renamed.</p>
+      <p style="margin-top:2rem"><a class="button" href="/">Return home</a></p>
+    </div>
+  </header>
 </BaseLayout>

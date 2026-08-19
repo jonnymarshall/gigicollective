@@ -2,6 +2,6 @@
   "palette": "clay",
   "headingFont": "serif",
   "bodyFont": "sans",
-  "corners": "soft",
-  "headingWeight": "regular"
+  "headingStyle": "classic",
+  "corners": "square"
 }

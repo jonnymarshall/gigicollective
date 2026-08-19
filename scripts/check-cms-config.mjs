@@ -41,6 +41,78 @@ for (const collection of config.collections ?? []) {
   }
 }
 
+
+// ---------------------------------------------------------------------------
+// Cross-check the section types against the Astro schema.
+//
+// These two files have to agree. If the CMS offers a field or a dropdown value
+// that the schema rejects, the build fails the moment she picks it, and the
+// failure lands on her publish rather than on ours. Catch it here instead.
+// ---------------------------------------------------------------------------
+
+const schemaSource = readFileSync('src/content.config.ts', 'utf8');
+
+/** The slice of the schema that defines one block type, so checks stay scoped. */
+function schemaSliceFor(typeName) {
+  const marker = `z.literal('${typeName}')`;
+  const start = schemaSource.indexOf(marker);
+  if (start === -1) return null;
+  const next = schemaSource.indexOf('z.literal(', start + marker.length);
+  return schemaSource.slice(start, next === -1 ? schemaSource.length : next);
+}
+
+/**
+ * Shared enums declared once at the top, like `const background = z.enum([...])`,
+ * and then referenced from several block types. Without resolving these, every
+ * field using one looks like a mismatch.
+ */
+const sharedEnums = new Map();
+for (const match of schemaSource.matchAll(/const\s+(\w+)\s*=\s*z\.enum\(\[([^\]]*)\]\)/g)) {
+  const values = [...match[2].matchAll(/'([^']+)'/g)].map((m) => m[1]);
+  sharedEnums.set(match[1], values);
+}
+
+/** The values a given field is allowed to hold, or null if it is not an enum. */
+function allowedValues(slice, fieldName) {
+  const inline = slice.match(new RegExp(`\\b${fieldName}\\s*:\\s*z\\.enum\\(\\[([^\\]]*)\\]`));
+  if (inline) return [...inline[1].matchAll(/'([^']+)'/g)].map((m) => m[1]);
+
+  const named = slice.match(new RegExp(`\\b${fieldName}\\s*:\\s*(\\w+)`));
+  if (named && sharedEnums.has(named[1])) return sharedEnums.get(named[1]);
+
+  return null;
+}
+
+const pages = config.collections.find((c) => c.name === 'pages');
+const blocks = pages?.fields?.find((f) => f.name === 'blocks');
+
+for (const type of blocks?.types ?? []) {
+  const slice = schemaSliceFor(type.name);
+  if (!slice) {
+    problems.push(`section "${type.name}" has no matching z.literal in content.config.ts`);
+    continue;
+  }
+  for (const field of type.fields ?? []) {
+    if (!new RegExp(`\\b${field.name}\\s*:`).test(slice)) {
+      problems.push(`section "${type.name}" offers field "${field.name}" which the schema does not define`);
+    }
+    if (field.widget === 'select' && Array.isArray(field.options)) {
+      const allowed = allowedValues(slice, field.name);
+      if (allowed) {
+        for (const option of field.options) {
+          const value = typeof option === 'object' ? option.value : option;
+          if (typeof value === 'string' && !allowed.includes(value)) {
+            problems.push(
+              `section "${type.name}".${field.name} offers "${value}", but the schema allows ` +
+              `only ${allowed.map((v) => `"${v}"`).join(', ')}. Choosing it in the CMS would fail the build.`,
+            );
+          }
+        }
+      }
+    }
+  }
+}
+
 if (problems.length) {
   console.error('config.yml has problems:');
   for (const p of problems) console.error('  -', p);

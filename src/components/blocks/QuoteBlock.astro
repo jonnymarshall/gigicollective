@@ -1,13 +1,19 @@
 ---
-interface Props { quote?: string; attribution?: string }
-const { quote, attribution } = Astro.props;
+interface Props { eyebrow?: string; quote?: string; attribution?: string; role?: string; background?: string }
+const { eyebrow, quote, attribution, role, background = 'tint' } = Astro.props;
 ---
 {quote && (
-  <section class="block block--quote">
+  <section class={`band band--${background} block--quote`}>
     <div class="wrap">
-      <figure>
+      {eyebrow && <p class="eyebrow">{eyebrow}</p>}
+      <figure class="quote">
+        <span class="quote__mark" aria-hidden="true">&ldquo;</span>
         <blockquote>{quote}</blockquote>
-        {attribution && <figcaption>{attribution}</figcaption>}
+        {attribution && (
+          <figcaption>
+            {attribution}{role && <><br />{role}</>}
+          </figcaption>
+        )}
       </figure>
     </div>
   </section>

@@ -16,49 +16,67 @@ import { glob } from 'astro/loaders';
  */
 const galleryItem = z.object({ image: z.string(), caption: z.string().optional() });
 
+/** Which full-width band a section sits on. Alternating these gives the page its rhythm. */
+const background = z.enum(['bg', 'tint', 'dark']);
+
 const block = z.discriminatedUnion('type', [
   z.object({
     type: z.literal('text'),
+    eyebrow: z.string().optional(),
     heading: z.string().optional(),
     text: z.string().optional(),
     width: z.enum(['narrow', 'wide']).default('narrow'),
+    background: background.default('bg'),
   }),
   z.object({
     type: z.literal('imageText'),
+    eyebrow: z.string().optional(),
     heading: z.string().optional(),
     text: z.string().optional(),
     image: z.string().optional(),
     imageSide: z.enum(['left', 'right']).default('right'),
     linkLabel: z.string().optional(),
     linkUrl: z.string().optional(),
+    background: background.default('bg'),
   }),
   z.object({
     type: z.literal('image'),
     image: z.string().optional(),
     caption: z.string().optional(),
-    width: z.enum(['narrow', 'wide']).default('wide'),
+    width: z.enum(['wide', 'full']).default('wide'),
+    background: background.default('bg'),
   }),
   z.object({
     type: z.literal('gallery'),
+    eyebrow: z.string().optional(),
     heading: z.string().optional(),
     images: z.array(galleryItem).default([]),
     columns: z.number().default(3),
+    background: background.default('bg'),
   }),
   z.object({
     type: z.literal('quote'),
+    eyebrow: z.string().optional(),
     quote: z.string().optional(),
     attribution: z.string().optional(),
+    role: z.string().optional(),
+    background: background.default('tint'),
   }),
   z.object({
     type: z.literal('cta'),
+    eyebrow: z.string().optional(),
     heading: z.string().optional(),
     text: z.string().optional(),
     buttonLabel: z.string().optional(),
     buttonUrl: z.string().optional(),
+    image: z.string().optional(),
+    background: background.default('dark'),
   }),
   z.object({
     type: z.literal('features'),
+    eyebrow: z.string().optional(),
     heading: z.string().optional(),
+    numbered: z.boolean().default(false),
     items: z
       .array(z.object({
         title: z.string(),
@@ -66,6 +84,7 @@ const block = z.discriminatedUnion('type', [
         image: z.string().optional(),
       }))
       .default([]),
+    background: background.default('tint'),
   }),
 ]);
 

@@ -16,30 +16,44 @@ const { Content } = await render(project);
   description={project.data.description}
   image={project.data.coverImage || undefined}
   article
+  overlayHeader
 >
-  <article class="wrap" id={`project-${project.id}`}>
-    <header style="margin-bottom:2.5rem">
-      <h1>{project.data.title}</h1>
-      {project.data.description && <p class="lead">{project.data.description}</p>}
+  <article id={`project-${project.id}`}>
+    <header class="page-head">
+      <div class="wrap">
+        <p class="eyebrow">Project</p>
+        <h1 class="display">{project.data.title}</h1>
+        {project.data.description && <p class="lead" style="margin-top:1.5rem">{project.data.description}</p>}
+      </div>
     </header>
 
     {project.data.coverImage && (
-      <img class="hero__image" src={project.data.coverImage} alt="" style="margin-bottom:2.5rem" />
+      <img src={project.data.coverImage} alt="" style="width:100%;max-height:70vh;object-fit:cover" />
     )}
 
-    <div class="prose"><Content /></div>
+    <div class="band band--bg">
+      <div class="wrap">
+        <div class="prose"><Content /></div>
+      </div>
+    </div>
 
     {project.data.gallery.length > 0 && (
-      <div class="gallery" style="margin-top:3rem">
-        {project.data.gallery.map((item) => (
-          <figure>
-            <img src={item.image} alt={item.caption || ''} loading="lazy" />
-            {item.caption && <figcaption>{item.caption}</figcaption>}
-          </figure>
-        ))}
+      <div class="band band--tint">
+        <div class="wrap">
+          <div class="gallery">
+            {project.data.gallery.map((item) => (
+              <figure>
+                <img src={item.image} alt={item.caption || ''} loading="lazy" />
+                {item.caption && <figcaption>{item.caption}</figcaption>}
+              </figure>
+            ))}
+          </div>
+        </div>
       </div>
     )}
 
-    <p style="margin-top:3rem"><a href="/work">Back to all work</a></p>
+    <div class="band band--bg" style="padding-block:3rem">
+      <div class="wrap"><a class="button button--ghost" href="/work">All projects</a></div>
+    </div>
   </article>
 </BaseLayout>

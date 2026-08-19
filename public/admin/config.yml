@@ -59,31 +59,50 @@ collections:
       - name: home
         label: Front page
         file: src/data/home.json
-        description: Everything that appears on the front page.
+        description: Everything that appears on the front page, top to bottom.
         fields:
-          - { name: heroHeading, label: Big heading, widget: string }
-          - { name: heroSubheading, label: Sentence under the heading, widget: text, required: false }
-          - { name: heroImage, label: Large image, widget: image, required: false, hint: "Optional. Sits below the heading. A wide landscape photo works best." }
+          - { name: heroHeading, label: Big heading, widget: string, hint: "The first thing anyone reads. Keep it to a few words." }
+          - { name: heroEyebrow, label: Small line above, widget: string, required: false, hint: "A few words in small capitals." }
+          - { name: heroSubheading, label: Sentence below the heading, widget: text, required: false }
+          - { name: heroImage, label: Background photograph, widget: image, required: false, hint: "Sits behind the heading, darkened so the text stays readable. A wide, calm photo works best." }
           - { name: ctaLabel, label: Button text, widget: string, required: false, hint: "Leave blank for no button." }
-          - { name: ctaUrl, label: Button links to, widget: string, required: false, default: "/contact", hint: "For example /contact" }
-          - { name: introHeading, label: Intro heading, widget: string, required: false }
-          - { name: introText, label: Intro paragraph, widget: text, required: false }
+          - { name: ctaUrl, label: Button goes to, widget: string, required: false, default: "/work" }
+
+          - { name: introEyebrow, label: "Intro: small line above", widget: string, required: false }
+          - { name: introHeading, label: "Intro: heading", widget: string, required: false }
+          - { name: introText, label: "Intro: text", widget: text, required: false }
+          - { name: introImage, label: "Intro: photograph", widget: image, required: false, hint: "Sits beside the text. A portrait photo suits this spot." }
+          - { name: introLinkLabel, label: "Intro: button text", widget: string, required: false }
+          - { name: introLinkUrl, label: "Intro: button goes to", widget: string, required: false }
+
           - name: sections
-            label: Front page sections
+            label: Extra sections
             widget: list
             required: false
             label_singular: section
             summary: "{{fields.heading}}"
+            hint: "Optional. These appear between the intro and the project list, alternating sides automatically."
             fields:
               - { name: heading, label: Heading, widget: string }
               - { name: text, label: Text, widget: text, required: false }
               - { name: image, label: Image, widget: image, required: false }
-              - { name: linkLabel, label: Link text, widget: string, required: false }
-              - { name: linkUrl, label: Link goes to, widget: string, required: false }
-          - { name: showLatestPosts, label: Show latest blog posts on the front page, widget: boolean, default: true }
-          - { name: latestPostsHeading, label: Heading above the blog posts, widget: string, default: "Latest from the blog" }
+              - { name: linkLabel, label: Button text, widget: string, required: false }
+              - { name: linkUrl, label: Button goes to, widget: string, required: false }
+
           - { name: showFeaturedWork, label: Show recent work on the front page, widget: boolean, default: true }
-          - { name: featuredWorkHeading, label: Heading above the work, widget: string, default: "Recent work" }
+          - { name: featuredWorkEyebrow, label: "Work: small line above", widget: string, required: false, default: "Featured projects" }
+          - { name: featuredWorkHeading, label: "Work: heading", widget: string, default: "A collection of thoughtful spaces" }
+
+          - { name: showLatestPosts, label: Show latest journal posts on the front page, widget: boolean, default: true }
+          - { name: latestPostsEyebrow, label: "Journal: small line above", widget: string, required: false, default: "Journal" }
+          - { name: latestPostsHeading, label: "Journal: heading", widget: string, default: "From the journal" }
+
+          - { name: closingEyebrow, label: "Closing: small line above", widget: string, required: false, default: "Inquire" }
+          - { name: closingHeading, label: "Closing: heading", widget: string, required: false, hint: "The dark band at the bottom. Leave blank to hide it." }
+          - { name: closingText, label: "Closing: text", widget: text, required: false }
+          - { name: closingButtonLabel, label: "Closing: button text", widget: string, required: false }
+          - { name: closingButtonUrl, label: "Closing: button goes to", widget: string, required: false }
+          - { name: closingImage, label: "Closing: photograph", widget: image, required: false }
 
       - name: theme
         label: Look and feel
@@ -95,20 +114,18 @@ collections:
             widget: select
             default: clay
             options:
-              - { label: "Warm clay (browns and cream)", value: clay }
-              - { label: "Sage (soft greens)", value: sage }
-              - { label: "Ink and cream (near black)", value: ink }
-              - { label: "Dusty rose (muted pinks)", value: rose }
-              - { label: "Slate and sky (blues)", value: slate }
+              - { label: "Clay and bone (warm browns)", value: clay }
+              - { label: "Sage and linen (soft greens)", value: sage }
+              - { label: "Stone and mist (cool greys)", value: stone }
+              - { label: "Terracotta and sand (warm orange)", value: terracotta }
+              - { label: "Ink and oat (deep blue-grey)", value: ink }
           - name: headingFont
             label: Heading font
             widget: select
             default: serif
             options:
-              - { label: "Serif (classic, with small strokes)", value: serif }
-              - { label: "Sans serif (clean and modern)", value: sans }
-              - { label: "Rounded (soft and friendly)", value: rounded }
-              - { label: "Typewriter", value: mono }
+              - { label: "Serif (elegant, with fine strokes)", value: serif }
+              - { label: "Sans serif (clean and plain)", value: sans }
           - name: bodyFont
             label: Body font
             widget: select
@@ -116,24 +133,22 @@ collections:
             options:
               - { label: "Sans serif (easiest to read)", value: sans }
               - { label: "Serif", value: serif }
-              - { label: "Rounded", value: rounded }
-              - { label: "Typewriter", value: mono }
-          - name: headingWeight
-            label: Heading thickness
+          - name: headingStyle
+            label: Heading style
             widget: select
-            default: regular
+            default: classic
             options:
-              - { label: "Regular", value: regular }
-              - { label: "Light", value: light }
-              - { label: "Bold", value: bold }
+              - { label: "Classic", value: classic }
+              - { label: "Airy and spaced out (capitals)", value: airy }
+              - { label: "Bold and close together", value: bold }
           - name: corners
             label: Corner style
             widget: select
-            default: soft
+            default: square
             options:
-              - { label: "Softly rounded", value: soft }
               - { label: "Square", value: square }
-              - { label: "Very rounded", value: round }
+              - { label: "Slightly rounded", value: soft }
+              - { label: "Rounded", value: round }
 
   # ---------------------------------------------------------------------------
   - name: pages
@@ -165,6 +180,7 @@ collections:
             label: Text
             summary: "Text: {{fields.heading}}"
             fields:
+              - { name: eyebrow, label: Small line above the heading, widget: string, required: false }
               - { name: heading, label: Heading, widget: string, required: false }
               - { name: text, label: Text, widget: markdown }
               - name: width
@@ -175,10 +191,20 @@ collections:
                   - { label: "Narrow (easiest to read)", value: narrow }
                   - { label: "Full width", value: wide }
 
+              - name: background
+                label: Background shade
+                widget: select
+                default: bg
+                options:
+                  - { label: "Page background", value: bg }
+                  - { label: "Slightly darker band", value: tint }
+                  - { label: "Dark band", value: dark }
+
           - name: imageText
             label: Text beside an image
             summary: "Text and image: {{fields.heading}}"
             fields:
+              - { name: eyebrow, label: Small line above the heading, widget: string, required: false }
               - { name: heading, label: Heading, widget: string, required: false }
               - { name: text, label: Text, widget: markdown, required: false }
               - { name: image, label: Image, widget: image }
@@ -192,6 +218,15 @@ collections:
               - { name: linkLabel, label: Button text, widget: string, required: false, hint: "Leave blank for no button." }
               - { name: linkUrl, label: Button goes to, widget: string, required: false }
 
+              - name: background
+                label: Background shade
+                widget: select
+                default: bg
+                options:
+                  - { label: "Page background", value: bg }
+                  - { label: "Slightly darker band", value: tint }
+                  - { label: "Dark band", value: dark }
+
           - name: image
             label: A single image
             summary: "Image: {{fields.caption}}"
@@ -203,13 +238,23 @@ collections:
                 widget: select
                 default: wide
                 options:
-                  - { label: Full width, value: wide }
-                  - { label: Narrow, value: narrow }
+                  - { label: "Inside the page margins", value: wide }
+                  - { label: "Edge to edge", value: full }
+
+              - name: background
+                label: Background shade
+                widget: select
+                default: bg
+                options:
+                  - { label: "Page background", value: bg }
+                  - { label: "Slightly darker band", value: tint }
+                  - { label: "Dark band", value: dark }
 
           - name: gallery
             label: Photo gallery
             summary: "Gallery: {{fields.heading}}"
             fields:
+              - { name: eyebrow, label: Small line above the heading, widget: string, required: false }
               - { name: heading, label: Heading, widget: string, required: false }
               - name: columns
                 label: Photos per row
@@ -227,27 +272,60 @@ collections:
                   - { name: image, label: Photo, widget: image }
                   - { name: caption, label: Caption, widget: string, required: false }
 
+              - name: background
+                label: Background shade
+                widget: select
+                default: bg
+                options:
+                  - { label: "Page background", value: bg }
+                  - { label: "Slightly darker band", value: tint }
+                  - { label: "Dark band", value: dark }
+
           - name: quote
             label: Pull quote
             summary: "Quote: {{fields.quote}}"
             fields:
+              - { name: eyebrow, label: Small line above, widget: string, required: false }
               - { name: quote, label: Quote, widget: text, hint: "Do not add quotation marks, they are added for you." }
               - { name: attribution, label: Who said it, widget: string, required: false }
+              - { name: role, label: "Their role or project", widget: string, required: false }
+
+              - name: background
+                label: Background shade
+                widget: select
+                default: bg
+                options:
+                  - { label: "Page background", value: bg }
+                  - { label: "Slightly darker band", value: tint }
+                  - { label: "Dark band", value: dark }
 
           - name: cta
             label: Call to action box
             summary: "Call to action: {{fields.heading}}"
             fields:
+              - { name: eyebrow, label: Small line above, widget: string, required: false }
               - { name: heading, label: Heading, widget: string }
               - { name: text, label: Text, widget: text, required: false }
               - { name: buttonLabel, label: Button text, widget: string, required: false }
               - { name: buttonUrl, label: Button goes to, widget: string, required: false, hint: "For example /contact" }
+              - { name: image, label: Photograph, widget: image, required: false }
+
+              - name: background
+                label: Background shade
+                widget: select
+                default: bg
+                options:
+                  - { label: "Page background", value: bg }
+                  - { label: "Slightly darker band", value: tint }
+                  - { label: "Dark band", value: dark }
 
           - name: features
             label: Row of cards
             summary: "Cards: {{fields.heading}}"
             fields:
+              - { name: eyebrow, label: Small line above the heading, widget: string, required: false }
               - { name: heading, label: Heading, widget: string, required: false }
+              - { name: numbered, label: Number the cards, widget: boolean, default: false, hint: "Shows 01, 02, 03 instead of the small images. Good for describing a process." }
               - name: items
                 label: Cards
                 label_singular: card
@@ -257,6 +335,14 @@ collections:
                   - { name: title, label: Title, widget: string }
                   - { name: text, label: Text, widget: text, required: false }
                   - { name: image, label: Small image, widget: image, required: false }
+              - name: background
+                label: Background shade
+                widget: select
+                default: bg
+                options:
+                  - { label: "Page background", value: bg }
+                  - { label: "Slightly darker band", value: tint }
+                  - { label: "Dark band", value: dark }
       - { name: body, label: Extra text below the sections, widget: markdown, required: false, hint: "Usually left empty. Anything here appears underneath all the sections above." }
 
   # ---------------------------------------------------------------------------

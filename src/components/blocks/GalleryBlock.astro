@@ -1,13 +1,15 @@
 ---
 interface GalleryItem { image: string; caption?: string }
-interface Props { heading?: string; images?: GalleryItem[]; columns?: number }
-const { heading, images = [], columns = 3 } = Astro.props;
+interface Props { eyebrow?: string; heading?: string; images?: GalleryItem[]; columns?: number; background?: string }
+const { eyebrow, heading, images = [], columns = 3, background = 'bg' } = Astro.props;
+const min = columns === 2 ? '360px' : columns === 4 ? '200px' : '260px';
 ---
 {images.length > 0 && (
-  <section class="block block--gallery">
+  <section class={`band band--${background} block--gallery`}>
     <div class="wrap">
-      {heading && <h2>{heading}</h2>}
-      <div class="gallery" style={`--gallery-min:${columns === 2 ? '340px' : columns === 4 ? '190px' : '240px'}`}>
+      {eyebrow && <p class="eyebrow">{eyebrow}</p>}
+      {heading && <h2 style="margin-bottom:2.5rem">{heading}</h2>}
+      <div class="gallery" style={`--gallery-min:${min}`}>
         {images.map((item) => (
           <figure>
             <img src={item.image} alt={item.caption || ''} loading="lazy" />

@@ -1,14 +1,19 @@
 ---
 title: Contact
-description: How to get in touch.
+description: We would love to hear about your project.
 showInNav: true
 navOrder: 2
 draft: false
 blocks:
   - type: text
+    eyebrow: Get in touch
+    heading: Start a conversation
     text: |
-      The easiest way to reach me is by email.
+      The easiest way to reach us is by email, and we usually reply within a
+      couple of days.
 
-      Replace this page with your own contact details.
+      Tell us a little about your project, where you are, and what you are
+      hoping to achieve.
     width: narrow
+    background: bg
 ---

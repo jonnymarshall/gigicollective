@@ -1,13 +1,22 @@
 ---
-interface Props { heading?: string; text?: string; buttonLabel?: string; buttonUrl?: string }
-const { heading, text, buttonLabel, buttonUrl } = Astro.props;
+interface Props {
+  eyebrow?: string; heading?: string; text?: string;
+  buttonLabel?: string; buttonUrl?: string; image?: string; background?: string;
+}
+const { eyebrow, heading, text, buttonLabel, buttonUrl, image, background = 'dark' } = Astro.props;
 ---
-<section class="block block--cta">
+<section class={`band band--${background} block--cta`}>
   <div class="wrap">
-    <div class="cta">
-      {heading && <h2>{heading}</h2>}
-      {text && <p>{text}</p>}
-      {buttonLabel && buttonUrl && <a class="button" href={buttonUrl}>{buttonLabel}</a>}
+    <div class={image ? 'split' : ''}>
+      {image && <img src={image} alt="" loading="lazy" />}
+      <div>
+        {eyebrow && <p class="eyebrow">{eyebrow}</p>}
+        {heading && <h2>{heading}</h2>}
+        {text && <p class="lead">{text}</p>}
+        {buttonLabel && buttonUrl && (
+          <p style="margin-top:2rem"><a class="button" href={buttonUrl}>{buttonLabel}</a></p>
+        )}
+      </div>
     </div>
   </div>
 </section>
