@@ -29,6 +29,12 @@ jobs:
         uses: withastro/action@v6
         with:
           node-version: 22
+        env:
+          # Set the repository variable PUBLIC_NOINDEX to "true" while the site is
+          # staged, so search engines ignore it. Delete the variable on launch day.
+          #   gh variable set PUBLIC_NOINDEX --body true    (turn on)
+          #   gh variable delete PUBLIC_NOINDEX             (turn off, at launch)
+          PUBLIC_NOINDEX: ${{ vars.PUBLIC_NOINDEX }}
 
   deploy:
     needs: build

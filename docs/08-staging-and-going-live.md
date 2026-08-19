@@ -19,73 +19,71 @@ is wrong, and it disappears the moment the site is served from the root of somet
 
 So the fix is not to patch the paths. It is to preview somewhere that gives you a root.
 
-## Recommended: a Cloudflare Pages preview
+## Recommended: a staging subdomain on her own domain
 
-Cloudflare Pages gives every project a free `something.pages.dev` address that serves from
-the **root**. No subfolder, so the site looks exactly as it will on the real domain.
+Point a subdomain at the site you already have. It serves from the root, so the styling and
+links work. Her live site at `gigicollective.com` is untouched, because adding a subdomain
+record cannot affect the root domain.
 
-It changes nothing about DNS, so her live site is at zero risk. You already have a Cloudflare
-account from the login helper.
+This reuses the GitHub Pages setup that is already working, needs no new accounts, and is the
+truest rehearsal available: real DNS, real HTTPS, real domain.
 
 ### Setting it up
 
-1. Cloudflare dashboard → **Workers & Pages** → **Create** → **Pages** → **Connect to Git**
-2. Choose `jonnymarshall/gigicollective`
-3. Build settings:
+1. **In her DNS** (HostGator's control panel for now), add one record:
 
-   | Setting | Value |
-   |---|---|
-   | Framework preset | Astro (or None) |
-   | Build command | `npm run build` |
-   | Build output directory | `dist` |
-
-4. Add these environment variables:
-
-   | Name | Value | Why |
+   | Type | Name | Value |
    |---|---|---|
-   | `PUBLIC_NOINDEX` | `true` | Puts `noindex` on every page so Google never indexes the staging site and competes with her real one. |
-   | `NODE_VERSION` | `22` | Astro 7 needs Node 22+. The repo has a `.nvmrc` that Cloudflare usually respects, but setting this removes all doubt. |
+   | CNAME | `new` | `jonnymarshall.github.io` |
 
-5. Deploy. You get an address like `gigicollective.pages.dev`, fully styled, links working.
+   That is the only change. Do not touch the existing records for `@` or `www`. Those are
+   what keep her current site alive.
 
-6. Add that address to the login helper so the CMS works there too. Worker
-   `sveltia-cms-auth` → Settings → the **Variables and secrets** section at the top of the
-   page → edit `ALLOWED_DOMAINS` to:
+2. **In the repo**: Settings → Pages → Custom domain → `new.gigicollective.com` → Save.
+
+   Wait for the DNS check to pass, then tick **Enforce HTTPS**. This can take from a few
+   minutes to a few hours.
+
+3. **Keep search engines out.** Already done, but this is how it works: the repository
+   variable `PUBLIC_NOINDEX` is set to `true`, and the build passes it through so every page
+   gets `<meta name="robots" content="noindex, nofollow">`.
+
+   ```bash
+   gh variable list --repo jonnymarshall/gigicollective
+   ```
+
+4. **Let the CMS work there.** Worker `sveltia-cms-auth` → Settings → the **Variables and
+   secrets** section at the top of the page → edit `ALLOWED_DOMAINS` to:
 
    ```
-   gigicollective.com,gigicollective.pages.dev
+   gigicollective.com,new.gigicollective.com
    ```
 
-   Redeploy the Worker. Then `gigicollective.pages.dev/admin/` works, and she can write real
-   content into the staging site while you both review it.
+   Redeploy the Worker. Now `new.gigicollective.com/admin/` works and she can write real
+   content into the staging site.
 
-From here on, both GitHub Pages and Cloudflare Pages rebuild from the same repo on every
-push. They will always show the same content. Ignore the GitHub Pages one.
-
-### Checking the noindex actually applied
+### Checking the noindex applied
 
 ```bash
-curl -s https://gigicollective.pages.dev/ | grep robots
+curl -s https://new.gigicollective.com/ | grep robots
 ```
 
 Should print `<meta name="robots" content="noindex, nofollow">`. If it prints nothing, the
-environment variable did not take effect, and Google could index the staging site.
+staging site is indexable and will compete with her real one.
 
-## Alternative: a staging subdomain on her own domain
+## Alternative: Cloudflare Pages
 
-If you would rather rehearse on the real domain, point a subdomain at the site instead:
+Cloudflare gives every project a free `something.pages.dev` address that also serves from the
+root, and needs no DNS change at all.
 
-1. In her DNS, add one record: `CNAME` for `new` → `jonnymarshall.github.io`
-2. GitHub repo → Settings → Pages → Custom domain → `new.gigicollective.com`
-3. Add `new.gigicollective.com` to `ALLOWED_DOMAINS` on the Worker
+The catch as of August 2026: the Cloudflare dashboard has moved on from the flow their own
+docs describe. There is no longer a **Create** → **Pages** → **Connect to Git** path; there
+is a single **Create application** button, and Cloudflare now steers new projects towards
+"Workers with static assets" instead of Pages.
 
-`gigicollective.com` itself is untouched, so her HostGator site keeps serving as normal.
-Adding a subdomain record cannot affect the root domain.
-
-This is a truer rehearsal, because it tests real DNS and real HTTPS on her domain. It is
-slightly more work and it does mean touching her DNS earlier. Use `PUBLIC_NOINDEX=true` here
-too, which for GitHub Pages means adding it to the build step in
-`.github/workflows/deploy.yml`.
+It is still perfectly doable, just not worth fighting an unfamiliar dashboard when the
+subdomain route above reuses something already working. Come back to this only if you would
+rather not touch DNS at all.
 
 ## What to do while it is staged
 
