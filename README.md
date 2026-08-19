@@ -16,17 +16,15 @@ No server, no database, no monthly bill.
 - [x] Cloudflare login helper set up, see [docs/03](docs/03-cms-login-setup.md)
 - [x] She has a GitHub account and a collaborator invite
 - [x] CMS login working, she has published a change successfully
-- [ ] Staging preview set up, see [docs/08](docs/08-staging-and-going-live.md)
+- [x] Staging site live at https://new.gigicollective.com, see [docs/08](docs/08-staging-and-going-live.md)
 - [ ] Real content replacing the placeholders
 - [ ] Domain pointed at the site, see [docs/04](docs/04-hosting-and-domain.md)
 - [ ] `PUBLIC_NOINDEX` removed on launch day
 - [ ] HostGator cancelled, see [docs/00](docs/00-leaving-hostgator.md)
 
-The GitHub Pages address, https://jonnymarshall.github.io/gigicollective/, shows the site
-unstyled with broken menu links. That is not a fault. GitHub Pages serves project sites from
-a subfolder while the site is built for the root of a domain, so every path lands one level
-too high. Set up the staging preview in [docs/08](docs/08-staging-and-going-live.md) to see
-it properly, or run `npm run dev` locally.
+**Staging site: https://new.gigicollective.com** — fully working, and carrying a `noindex`
+tag so Google ignores it. Review and content migration happen here.
+`gigicollective.com` itself is still served by HostGator and is untouched.
 
 ## Requirements
 

@@ -2,12 +2,12 @@
 # Checks what the Cloudflare login helper can actually see at runtime.
 #
 # Run this whenever sign-in misbehaves. It tells you whether the three variables
-# reached the Worker, without needing the Cloudflare dashboard.
+# reached the login helper, without needing the Cloudflare dashboard.
 #
 #   sh scripts/check-login-helper.sh
 
 WORKER=https://sveltia-cms-auth.jonnymarshall5.workers.dev
-SITE=jonnymarshall.github.io   # change to gigicollective.com once DNS has moved
+SITE=new.gigicollective.com    # change to gigicollective.com on launch day
 
 probe() {
   curl -s "$WORKER/auth?provider=github&site_id=$1" \
@@ -23,13 +23,13 @@ if [ "$bogus" = "UNSUPPORTED_DOMAIN" ]; then
   echo "  OK. A bogus domain was correctly rejected."
 else
   echo "  PROBLEM. A bogus domain was let through, so the variable is not reaching"
-  echo "  the Worker. Right now anyone could point their own editor at it."
+  echo "  the login helper. Right now anyone could point their own editor at it."
 fi
 
 echo "GITHUB_CLIENT_ID and GITHUB_CLIENT_SECRET"
 case "$real" in
   MISCONFIGURED_CLIENT)
-    echo "  PROBLEM. Not reaching the Worker."
+    echo "  PROBLEM. Not reaching the login helper."
     echo "  Usual causes, in order: they were added to the Variables and secrets"
     echo "  section nested under Build instead of the one at the top of the page;"
     echo "  or Deploy was never clicked; or a typo in a variable name." ;;
