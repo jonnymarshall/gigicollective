@@ -73,13 +73,24 @@ Open a page, scroll to **Page sections**, and click to add one. The choices are:
 
 | Section | What it does |
 |---|---|
-| **Text** | Words. Optionally with a heading. Choose narrow (easier to read) or full width. |
+| **Text** | Words, with an optional heading. |
 | **Text beside an image** | Words on one side, a picture on the other. You choose which side the picture goes, so you can alternate down the page. |
-| **A single image** | One picture, full width or narrow, with an optional caption. |
+| **A single image** | One picture, inside the page margins or edge to edge, with an optional caption. |
 | **Photo gallery** | A grid of pictures. Choose 2, 3 or 4 per row. |
 | **Pull quote** | A short line made big. Do not type quotation marks, they are added for you. |
 | **Call to action box** | A tinted box with a heading, a line of text and a button. Good at the bottom of a page. |
-| **Row of cards** | Two to four small cards side by side, each with a title and a little text. Good for listing services. |
+| **Row of cards** | Two to four cards side by side. Tick **Number the cards** to show 01, 02, 03 instead of pictures, which suits describing a process. |
+
+Two settings appear on nearly every section:
+
+**Small line above the heading** is the little bit of text in wide capitals that sits above a
+heading. Use it for a category word or two, like "Our philosophy" or "Featured work". Leave it
+blank if you do not need it.
+
+**Background shade** decides which colour band the section sits on: the normal page
+background, a slightly darker band, or a dark band with light text. Alternating these down a
+page is what stops it feeling flat. A good habit is to swap shade every second section, and to
+finish a page with a dark one.
 
 **Reordering** is drag and drop. Grab the handle on a section and move it up or down.
 
@@ -105,9 +116,9 @@ run, rather than chopping it up for no reason.
 
 **Site settings** → **Look and feel** changes the entire site at once.
 
-- **Colour scheme**: five options, from warm browns through greens, blues and pinks
-- **Heading font** and **Body font**: serif, sans serif, rounded or typewriter
-- **Heading thickness**: light, regular or bold
+- **Colour scheme**: five options, from warm browns through greens and greys
+- **Heading font** and **Body font**: serif or sans serif, chosen separately
+- **Heading style**: classic, airy and spaced out in capitals, or bold and close together
 - **Corner style**: how rounded the corners of images and boxes are
 
 Every combination has been checked, so there is no way to pick something that looks wrong or
@@ -123,9 +134,10 @@ Inside the writing box, drag a photo straight in, or click the image button.
 
 Two things that make a real difference:
 
-- **Shrink big photos first.** A photo straight off a phone can be 5 megabytes, which makes
-  the page slow to load. Around 1500 pixels wide is plenty. Preview on a Mac can do this:
-  open the photo, Tools, Adjust Size.
+- **Shrink big photos first.** This matters more than it sounds. A photo straight off a phone
+  or a stock site can be several megabytes, and a visitor on a phone has to download all of it
+  before they see anything. Around 1500 pixels wide and under 400KB is plenty, even for a
+  full-width header image. On a Mac: open the photo in Preview, then Tools, Adjust Size.
 - **Give it a sensible name before uploading.** `lavender-workshop.jpg` is better than
   `IMG_4471.jpg`, both for finding it later and for Google.
 
