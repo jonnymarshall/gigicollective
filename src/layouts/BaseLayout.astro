@@ -17,6 +17,10 @@ const pageTitle = title ? `${title} | ${site.title}` : `${site.title} | ${site.t
 const pageDescription = description || site.description;
 const canonical = new URL(Astro.url.pathname, Astro.site ?? Astro.url.origin);
 const ogImage = image ? new URL(image, Astro.site ?? Astro.url.origin) : undefined;
+
+// Set PUBLIC_NOINDEX=true on a staging deploy so Google never indexes it and
+// competes with the real site. Leave it unset in production.
+const noindex = import.meta.env.PUBLIC_NOINDEX === 'true';
 ---
 
 <!doctype html>
@@ -26,6 +30,7 @@ const ogImage = image ? new URL(image, Astro.site ?? Astro.url.origin) : undefin
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{pageTitle}</title>
     <meta name="description" content={pageDescription} />
+    {noindex && <meta name="robots" content="noindex, nofollow" />}
     <link rel="canonical" href={canonical} />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="sitemap" href="/sitemap-index.xml" />

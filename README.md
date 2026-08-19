@@ -13,16 +13,20 @@ No server, no database, no monthly bill.
 - [x] Site built, blog / pages / work sections working
 - [x] Repo created and pushed
 - [x] GitHub Pages turned on, deploying automatically on every push
-- [ ] Cloudflare login helper set up, see [docs/03](docs/03-cms-login-setup.md)
-- [ ] She has a GitHub account and a collaborator invite
-- [ ] Domain pointed at the site, see [docs/04](docs/04-hosting-and-domain.md)
+- [x] Cloudflare login helper set up, see [docs/03](docs/03-cms-login-setup.md)
+- [x] She has a GitHub account and a collaborator invite
+- [x] CMS login working, she has published a change successfully
+- [ ] Staging preview set up, see [docs/08](docs/08-staging-and-going-live.md)
 - [ ] Real content replacing the placeholders
+- [ ] Domain pointed at the site, see [docs/04](docs/04-hosting-and-domain.md)
+- [ ] `PUBLIC_NOINDEX` removed on launch day
 - [ ] HostGator cancelled, see [docs/00](docs/00-leaving-hostgator.md)
 
-Currently live at https://jonnymarshall.github.io/gigicollective/. The styling looks broken
-there because the site is configured for the root of `gigicollective.com`, not a subfolder.
-That corrects itself the moment the domain is attached. Use `npm run dev` to see it properly
-in the meantime.
+The GitHub Pages address, https://jonnymarshall.github.io/gigicollective/, shows the site
+unstyled with broken menu links. That is not a fault. GitHub Pages serves project sites from
+a subfolder while the site is built for the root of a domain, so every path lands one level
+too high. Set up the staging preview in [docs/08](docs/08-staging-and-going-live.md) to see
+it properly, or run `npm run dev` locally.
 
 ## Requirements
 
@@ -115,6 +119,7 @@ Read these in order:
 | [05-guide-for-the-editor.md](docs/05-guide-for-the-editor.md) | **Send this one to her.** Everything she needs |
 | [06-contact-form.md](docs/06-contact-form.md) | Adding a working contact form |
 | [07-moving-the-content-across.md](docs/07-moving-the-content-across.md) | Getting the old content over |
+| [08-staging-and-going-live.md](docs/08-staging-and-going-live.md) | Previewing the finished site safely, then the launch day sequence |
 
 ## Placeholders to replace before launch
 
