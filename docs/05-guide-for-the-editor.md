@@ -4,7 +4,7 @@ This is the only page you need. Nothing here can break anything.
 
 ## Getting in
 
-Go to **herdomain.com/admin** and sign in with GitHub. Bookmark that address.
+Go to **gigicollective.com/admin** and sign in with GitHub. Bookmark that address.
 
 You will stay signed in, so most of the time it opens straight to the editor.
 
@@ -12,15 +12,15 @@ You will stay signed in, so most of the time it opens straight to the editor.
 
 Down the left hand side there are four things:
 
-**Site settings** — things that show up on every page. The site name, the footer, your
+**Site settings**: things that show up on every page. The site name, the footer, your
 contact email, and everything on the front page. Two entries: *General* and *Front page*.
 
-**Pages** — standalone pages like About or Contact. These are the ones that appear in the
+**Pages**: standalone pages like About or Contact. These are the ones that appear in the
 menu at the top of the site.
 
-**Blog posts** — dated articles. Newest appears first.
+**Blog posts**: dated articles. Newest appears first.
 
-**Work** — projects or photo galleries.
+**Work**: projects or photo galleries.
 
 ## Writing something new
 
@@ -33,22 +33,22 @@ That is it. The website updates itself about a minute later. Refresh the page to
 
 ## The fields explained
 
-**Title** — the heading of the piece, and what makes its web address. Try to get this right
+**Title**: the heading of the piece, and what makes its web address. Try to get this right
 first time, because changing it later changes the address, and any link anyone saved will
 stop working.
 
-**Short summary** — one or two sentences. This is what shows up underneath the title in the
+**Short summary**: one or two sentences. This is what shows up underneath the title in the
 list of posts, and it is what Google puts under the link in search results. Worth writing
 properly.
 
-**Header image** — optional. Sits across the top of the page.
+**Header image**: optional. Sits across the top of the page.
 
-**Draft** — turn this **on** to hide something from the live site while you work on it. Turn
+**Draft**: turn this **on** to hide something from the live site while you work on it. Turn
 it **off** to make it visible. A draft is saved and safe, it just does not appear publicly.
 
-**Tags** — optional, groups related posts together.
+**Tags**: optional, groups related posts together.
 
-**Menu position** (Pages only) — a number. Lower numbers sit further to the left in the top
+**Menu position** (Pages only): a number. Lower numbers sit further to the left in the top
 menu. So `1` is first, `2` is second.
 
 ## Adding pictures

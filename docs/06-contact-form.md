@@ -26,7 +26,7 @@ const ACCESS_KEY = 'paste-the-key-here';
 
 <form action="https://api.web3forms.com/submit" method="POST" id="contact-form">
   <input type="hidden" name="access_key" value={ACCESS_KEY} />
-  <input type="hidden" name="redirect" value="https://herdomain.com/thanks" />
+  <input type="hidden" name="redirect" value="https://gigicollective.com/thanks" />
   <!-- Spam trap. Real people leave this blank; bots fill it in. -->
   <input type="checkbox" name="botcheck" class="hidden" style="display:none" tabindex="-1" />
 

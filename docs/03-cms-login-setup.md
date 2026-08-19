@@ -39,7 +39,7 @@ Cost: free. The free allowance is 100,000 runs a day. This will use maybe five.
 2. **OAuth Apps** → **New OAuth App**
 3. Fill in:
    - Application name: `Website editor`
-   - Homepage URL: your site address, for example `https://herdomain.com`
+   - Homepage URL: your site address, for example `https://gigicollective.com`
    - Authorization callback URL: the worker address from 2a with `/callback` on the end, so:
      ```
      https://sveltia-cms-auth.something.workers.dev/callback
@@ -61,7 +61,7 @@ Back in Cloudflare:
 |---|---|---|
 | `GITHUB_CLIENT_ID` | the Client ID from 2b | Plain text |
 | `GITHUB_CLIENT_SECRET` | the client secret from 2b | **Secret** (encrypted) |
-| `ALLOWED_DOMAINS` | `herdomain.com` | Plain text |
+| `ALLOWED_DOMAINS` | `gigicollective.com` | Plain text |
 
 `ALLOWED_DOMAINS` matters. Without it, anyone who finds the worker address could point their
 own editing page at it. With it, the login only works from your domain.
@@ -75,7 +75,7 @@ In `public/admin/config.yml`, set `base_url` to the worker address (no `/callbac
 ```yaml
 backend:
   name: github
-  repo: yourusername/wife-site
+  repo: jonnymarshall/gigicollective
   branch: main
   base_url: https://sveltia-cms-auth.something.workers.dev
 ```
@@ -92,7 +92,7 @@ with **Write** access. She gets an email invite and has to click accept, once.
 
 ## Testing it
 
-Go to `https://herdomain.com/admin/` and click **Sign In with GitHub**. If it lets you in
+Go to `https://gigicollective.com/admin/` and click **Sign In with GitHub**. If it lets you in
 and shows Site settings, Pages, Blog posts and Work down the left, it is working.
 
 Have her do the same on her own machine before you call it done.
@@ -109,7 +109,7 @@ Have her do the same on her own machine before you call it done.
 ## Local testing without any of this
 
 While developing on your own machine, `/admin/index.html` offers **Work with Local
-Repository**. Click it, pick the `wife-site` folder, and you can try the editor with no
+Repository**. Click it, pick the `gigicollective` folder, and you can try the editor with no
 login and no worker at all. Changes save straight to the files on disk.
 
 Note the `index.html` on the end. The local dev server needs it. On the live site plain

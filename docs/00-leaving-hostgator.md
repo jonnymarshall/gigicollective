@@ -7,17 +7,17 @@ are not the website.
 
 This is the single biggest thing people get wrong.
 
-If she has an address like `hello@herdomain.com`, that mailbox very likely lives on the
+If she has an address like `hello@gigicollective.com`, that mailbox very likely lives on the
 HostGator hosting plan. Cancel the hosting and the mailbox is gone, along with its history.
 
 Check: log in to HostGator cPanel and look for "Email Accounts". If any exist, they must be
 moved before cancelling.
 
 Replacement options:
-- **Cloudflare Email Routing** (free) — forwards `hello@herdomain.com` to an existing Gmail
+- **Cloudflare Email Routing** (free): forwards `hello@gigicollective.com` to an existing Gmail
   inbox. Good if she only receives, and is happy to reply from her Gmail address.
-- **Zoho Mail** (free for one domain, one user) — a real mailbox, real webmail.
-- **Google Workspace** (~$7/user/month) — a real Gmail inbox on her own domain. Easiest if she
+- **Zoho Mail** (free for one domain, one user): a real mailbox, real webmail.
+- **Google Workspace** (~$7/user/month): a real Gmail inbox on her own domain. Easiest if she
   already lives in Gmail.
 
 If a mailbox is moving, export the existing mail first (IMAP into a mail client, or the
@@ -36,10 +36,10 @@ Store this somewhere off the laptop too (external drive or cloud).
 
 Open the current site and list every page address, for example:
 ```
-herdomain.com/about
-herdomain.com/blog/some-post-title
+gigicollective.com/about
+gigicollective.com/blog/some-post-title
 ```
-Quick way to get the full list: visit `herdomain.com/sitemap.xml` in a browser, or run
+Quick way to get the full list: visit `gigicollective.com/sitemap.xml` in a browser, or run
 a free crawler. Save the list.
 
 Why: if a page moves to a different address on the new site, Google slowly forgets the old

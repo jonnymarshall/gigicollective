@@ -16,7 +16,7 @@ is faster and gets the full size originals rather than whatever the page happens
 
 For each page worth keeping:
 
-1. Open the old page in one tab and `herdomain.com/admin` in another.
+1. Open the old page in one tab and `gigicollective.com/admin` in another.
 2. Create the matching Page or Blog post.
 3. Copy the text across. Paste as plain text (Cmd Shift V) so the old site's formatting does
    not come with it, then apply headings and bold in the editor.
@@ -33,8 +33,8 @@ it behind.
 
 ## Keep the web addresses the same where you can
 
-If the old About page was at `herdomain.com/about-us`, name the new page so it lands on
-`herdomain.com/about-us` too. That way Google keeps whatever ranking it already has.
+If the old About page was at `gigicollective.com/about-us`, name the new page so it lands on
+`gigicollective.com/about-us` too. That way Google keeps whatever ranking it already has.
 
 The address comes from the title. A page titled "About Us" becomes `/about-us`
 automatically. If a title has to change, set up a redirect instead. See

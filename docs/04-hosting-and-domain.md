@@ -8,7 +8,7 @@ That is the whole setting. The workflow file at `.github/workflows/deploy.yml` i
 the project and does the rest.
 
 Push anything to `main` and watch the **Actions** tab. The first run takes a couple of
-minutes. When it goes green, the site is live at `https://yourusername.github.io/wife-site/`.
+minutes. When it goes green, the site is live at `https://jonnymarshall.github.io/gigicollective/`.
 
 That address will look slightly broken (styling and links off) because the site is configured
 for a real domain at the root, not a subfolder. That is expected and fixes itself in the next
@@ -18,7 +18,7 @@ step. If you want to check it properly before the domain is ready, run `npm run 
 
 Two parts, and they have to agree with each other.
 
-**On GitHub:** Settings → Pages → **Custom domain** → type `herdomain.com` → Save.
+**On GitHub:** Settings → Pages → **Custom domain** → type `gigicollective.com` → Save.
 
 That writes a file called `CNAME` into the repository. Do not delete it. If you ever rename
 or move the repo, check it is still there.
@@ -32,7 +32,7 @@ HostGator), create these records:
 | A | `@` | `185.199.109.153` |
 | A | `@` | `185.199.110.153` |
 | A | `@` | `185.199.111.153` |
-| CNAME | `www` | `yourusername.github.io` |
+| CNAME | `www` | `jonnymarshall.github.io` |
 
 All four A records are needed. They are GitHub's servers and are the same for everyone.
 
@@ -59,7 +59,7 @@ send `/old-page` to `/about`, create `public/old-page/index.html`:
 ```html
 <!doctype html>
 <meta http-equiv="refresh" content="0; url=/about">
-<link rel="canonical" href="https://herdomain.com/about">
+<link rel="canonical" href="https://gigicollective.com/about">
 ```
 
 Use the URL list from `docs/00-leaving-hostgator.md` step 3 to work out which ones are worth
@@ -69,7 +69,7 @@ doing. Anything with real traffic is worth it. One-off pages nobody visits are n
 
 1. Add the site at https://search.google.com/search-console
 2. Verify ownership (the DNS record method is easiest since you are already in the DNS settings)
-3. Submit the sitemap: `https://herdomain.com/sitemap-index.xml`
+3. Submit the sitemap: `https://gigicollective.com/sitemap-index.xml`
 
 The sitemap is generated automatically on every build, so this is a one-time job.
 

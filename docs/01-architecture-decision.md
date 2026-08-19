@@ -58,7 +58,7 @@ Her writing is saved as markdown files inside your GitHub repository.
 - Content is plain text files you own. Nothing to be locked out of.
 - She needs a free GitHub account, added to the repo so the editor can save on her behalf.
   She signs up once and then never visits GitHub again. She only ever opens
-  `herdomain.com/admin`.
+  `gigicollective.com/admin`.
 - One-time setup by you: a small free login helper deployed to Cloudflare. About 10 minutes,
   done once, then forgotten.
 - Publishing takes about 60 to 90 seconds to appear on the live site.
@@ -85,7 +85,7 @@ where the better image tooling genuinely earns its keep.
 
 ## Note on "she must not touch the code"
 
-Practically, this is already solved. She gets one bookmark, `herdomain.com/admin`, and that
+Practically, this is already solved. She gets one bookmark, `gigicollective.com/admin`, and that
 page only ever shows her the fields we choose to give her. There is no code visible anywhere
 in it.
 

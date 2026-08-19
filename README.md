@@ -1,12 +1,28 @@
-# wife-site
+# gigicollective
 
-A static website with a browser-based editor, hosted free.
+The website for Gigi Collective. A static site with a browser-based editor, hosted free.
 
 - **Astro** builds plain HTML from markdown files
 - **GitHub Pages** hosts it, rebuilding automatically whenever content is published
 - **Sveltia CMS** at `/admin` is where content is written. It saves straight into this repo
 
 No server, no database, no monthly bill.
+
+## Where this is up to
+
+- [x] Site built, blog / pages / work sections working
+- [x] Repo created and pushed
+- [x] GitHub Pages turned on, deploying automatically on every push
+- [ ] Cloudflare login helper set up, see [docs/03](docs/03-cms-login-setup.md)
+- [ ] She has a GitHub account and a collaborator invite
+- [ ] Domain pointed at the site, see [docs/04](docs/04-hosting-and-domain.md)
+- [ ] Real content replacing the placeholders
+- [ ] HostGator cancelled, see [docs/00](docs/00-leaving-hostgator.md)
+
+Currently live at https://jonnymarshall.github.io/gigicollective/. The styling looks broken
+there because the site is configured for the root of `gigicollective.com`, not a subfolder.
+That corrects itself the moment the domain is attached. Use `npm run dev` to see it properly
+in the meantime.
 
 ## Requirements
 
