@@ -1,0 +1,28 @@
+---
+import { renderMarkdown } from '../../lib/markdown';
+interface Props {
+  heading?: string;
+  text?: string;
+  image?: string;
+  imageSide?: string;
+  linkLabel?: string;
+  linkUrl?: string;
+}
+const { heading, text, image, imageSide = 'right', linkLabel, linkUrl } = Astro.props;
+---
+<section class="block block--imagetext">
+  <div class="wrap">
+    <!-- With no image chosen there is nothing to sit beside, so fall back to a
+         single readable column rather than leaving half the row empty. -->
+    <div class={image ? `split ${imageSide === 'left' ? 'split--flip' : ''}` : 'prose'}>
+      <div>
+        {heading && <h2>{heading}</h2>}
+        {text && <div set:html={renderMarkdown(text)} />}
+        {linkLabel && linkUrl && (
+          <p style="margin-top:1.5rem"><a class="button" href={linkUrl}>{linkLabel}</a></p>
+        )}
+      </div>
+      {image && <img src={image} alt="" loading="lazy" />}
+    </div>
+  </div>
+</section>

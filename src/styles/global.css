@@ -2,6 +2,9 @@
    Design tokens. Change these to restyle the whole site.
    --------------------------------------------------------------------------- */
 :root {
+  /* Colours, fonts and corner rounding are injected by BaseLayout from
+     src/data/theme.json, which she controls in the CMS. See src/lib/theme.ts.
+     The values here are only fallbacks for when that has not run. */
   --font-body: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   --font-heading: ui-serif, Georgia, Cambria, "Times New Roman", serif;
 
@@ -12,10 +15,13 @@
   --color-accent: #8a5a3b;
   --color-accent-hover: #6e4530;
   --color-border: #e6e1da;
+  --color-tint: #f6f1ea;
+
+  --heading-weight: 600;
+  --radius: 10px;
 
   --measure: 68ch;
   --page-max: 1120px;
-  --radius: 10px;
   --space: 1rem;
   --shadow: 0 1px 2px rgba(0, 0, 0, 0.04), 0 8px 24px rgba(0, 0, 0, 0.05);
 }
@@ -39,7 +45,7 @@ body {
 
 h1, h2, h3, h4 {
   font-family: var(--font-heading);
-  font-weight: 600;
+  font-weight: var(--heading-weight);
   line-height: 1.2;
   letter-spacing: -0.01em;
   margin: 0 0 0.5em;
@@ -167,3 +173,71 @@ main { flex: 1; padding-block: 3rem 5rem; }
   text-align: center;
   color: var(--color-muted);
 }
+
+/* ---------------------------------------------------------------------------
+   Blocks. Each one is a section she can add to a page in the CMS.
+   --------------------------------------------------------------------------- */
+.block { padding-block: 3rem; }
+.block:first-child { padding-top: 1rem; }
+.block--narrow .prose,
+.block--narrow > .wrap > h2 { max-width: var(--measure); }
+
+.block--text h2,
+.block--gallery h2,
+.block--features h2 { margin-bottom: 1.25rem; }
+
+.block--image figure { margin: 0; }
+.block--image img { border-radius: var(--radius); width: 100%; }
+.block--image figcaption,
+.gallery figcaption {
+  font-size: 0.875rem;
+  color: var(--color-muted);
+  margin-top: 0.6rem;
+}
+.block--narrow.block--image { max-width: var(--measure); margin-inline: auto; }
+
+.gallery { grid-template-columns: repeat(auto-fill, minmax(var(--gallery-min, 240px), 1fr)); }
+
+.block--quote figure { margin: 0; max-width: var(--measure); }
+.block--quote blockquote {
+  font-family: var(--font-heading);
+  font-size: clamp(1.3rem, 3vw, 1.75rem);
+  line-height: 1.4;
+  font-style: normal;
+  border: 0;
+  padding: 0;
+  margin: 0;
+  color: var(--color-text);
+}
+.block--quote blockquote::before { content: '“'; }
+.block--quote blockquote::after { content: '”'; }
+.block--quote figcaption {
+  margin-top: 1rem;
+  font-size: 0.9rem;
+  color: var(--color-muted);
+}
+
+.cta {
+  background: var(--color-tint);
+  border-radius: var(--radius);
+  padding: clamp(2rem, 5vw, 3.5rem);
+  text-align: center;
+}
+.cta h2 { margin-bottom: 0.5rem; }
+.cta p { max-width: 46ch; margin-inline: auto; color: var(--color-muted); }
+.cta .button { margin-top: 1.25rem; }
+
+.feature-grid {
+  display: grid;
+  gap: 2rem;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+.feature img {
+  width: 56px;
+  height: 56px;
+  object-fit: cover;
+  border-radius: var(--radius);
+  margin-bottom: 0.85rem;
+}
+.feature h3 { margin-bottom: 0.35rem; }
+.feature p { color: var(--color-muted); margin: 0; font-size: 0.95rem; }

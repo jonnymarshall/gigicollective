@@ -1,0 +1,11 @@
+---
+import { renderMarkdown } from '../../lib/markdown';
+interface Props { heading?: string; text?: string; width?: string }
+const { heading, text, width = 'narrow' } = Astro.props;
+---
+<section class={`block block--text block--${width}`}>
+  <div class="wrap">
+    {heading && <h2>{heading}</h2>}
+    {text && <div class="prose" set:html={renderMarkdown(text)} />}
+  </div>
+</section>

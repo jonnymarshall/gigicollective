@@ -4,16 +4,29 @@ description: A short line about who you are and what you do.
 showInNav: true
 navOrder: 1
 draft: false
+blocks:
+  - type: text
+    heading: ''
+    text: |
+      Replace this with your own words. This is a **text** section, so you can use
+      bold, links, lists and headings.
+    width: narrow
+  - type: imageText
+    heading: Text beside a picture
+    text: |
+      This section puts words next to an image. Use the "Put the image on the"
+      option to swap which side it sits on, so alternating sections do not all
+      look the same.
+    image: ''
+    imageSide: right
+    linkLabel: ''
+    linkUrl: ''
+  - type: quote
+    quote: A short line worth pulling out and making bigger than the rest.
+    attribution: Someone worth quoting
+  - type: cta
+    heading: Ready to talk?
+    text: A sentence encouraging people to get in touch.
+    buttonLabel: Contact us
+    buttonUrl: /contact
 ---
-
-Replace this text with your own. Anything you type in the editor appears here.
-
-You can use headings, **bold text**, links, lists, and images.
-
-## A heading
-
-A paragraph under the heading. Keep paragraphs fairly short and the page will
-be easy to read on a phone.
-
-- A list item
-- Another list item

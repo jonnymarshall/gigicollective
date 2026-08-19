@@ -1,0 +1,14 @@
+---
+interface Props { image?: string; caption?: string; width?: string }
+const { image, caption, width = 'wide' } = Astro.props;
+---
+{image && (
+  <section class={`block block--image block--${width}`}>
+    <div class="wrap">
+      <figure>
+        <img src={image} alt={caption || ''} loading="lazy" />
+        {caption && <figcaption>{caption}</figcaption>}
+      </figure>
+    </div>
+  </section>
+)}

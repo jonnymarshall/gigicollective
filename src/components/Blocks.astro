@@ -1,0 +1,41 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import TextBlock from './blocks/TextBlock.astro';
+import ImageTextBlock from './blocks/ImageTextBlock.astro';
+import ImageBlock from './blocks/ImageBlock.astro';
+import GalleryBlock from './blocks/GalleryBlock.astro';
+import QuoteBlock from './blocks/QuoteBlock.astro';
+import CtaBlock from './blocks/CtaBlock.astro';
+import FeaturesBlock from './blocks/FeaturesBlock.astro';
+
+/**
+ * Renders the sections a page is built from.
+ *
+ * Each branch is written out rather than looked up in a map so that TypeScript
+ * can narrow the block to its own shape. If a new block type is added to the
+ * schema and forgotten here, the build fails rather than silently dropping it.
+ */
+type Block = CollectionEntry<'pages'>['data']['blocks'][number];
+
+interface Props { blocks?: Block[] }
+const { blocks = [] } = Astro.props;
+---
+
+{blocks.map((block) => {
+  switch (block.type) {
+    case 'text':
+      return <TextBlock {...block} />;
+    case 'imageText':
+      return <ImageTextBlock {...block} />;
+    case 'image':
+      return <ImageBlock {...block} />;
+    case 'gallery':
+      return <GalleryBlock {...block} />;
+    case 'quote':
+      return <QuoteBlock {...block} />;
+    case 'cta':
+      return <CtaBlock {...block} />;
+    case 'features':
+      return <FeaturesBlock {...block} />;
+  }
+})}

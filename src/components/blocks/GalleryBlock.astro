@@ -1,0 +1,20 @@
+---
+interface GalleryItem { image: string; caption?: string }
+interface Props { heading?: string; images?: GalleryItem[]; columns?: number }
+const { heading, images = [], columns = 3 } = Astro.props;
+---
+{images.length > 0 && (
+  <section class="block block--gallery">
+    <div class="wrap">
+      {heading && <h2>{heading}</h2>}
+      <div class="gallery" style={`--gallery-min:${columns === 2 ? '340px' : columns === 4 ? '190px' : '240px'}`}>
+        {images.map((item) => (
+          <figure>
+            <img src={item.image} alt={item.caption || ''} loading="lazy" />
+            {item.caption && <figcaption>{item.caption}</figcaption>}
+          </figure>
+        ))}
+      </div>
+    </div>
+  </section>
+)}

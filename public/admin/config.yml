@@ -23,10 +23,10 @@ public_folder: /images/uploads
 # Powers the "View site" link in the editor.
 site_url: https://gigicollective.com
 
-# No preview pane. The editor is simpler without one, and the live site is one
-# click away.
+# Preview pane on, so she can see the content taking shape rather than typing
+# into blank boxes. It shows the fields laid out, not the finished site styling.
 editor:
-  preview: false
+  preview: true
 
 collections:
   # ---------------------------------------------------------------------------
@@ -85,6 +85,56 @@ collections:
           - { name: showFeaturedWork, label: Show recent work on the front page, widget: boolean, default: true }
           - { name: featuredWorkHeading, label: Heading above the work, widget: string, default: "Recent work" }
 
+      - name: theme
+        label: Look and feel
+        file: src/data/theme.json
+        description: Colours and fonts for the whole site. Changing these changes every page.
+        fields:
+          - name: palette
+            label: Colour scheme
+            widget: select
+            default: clay
+            options:
+              - { label: "Warm clay (browns and cream)", value: clay }
+              - { label: "Sage (soft greens)", value: sage }
+              - { label: "Ink and cream (near black)", value: ink }
+              - { label: "Dusty rose (muted pinks)", value: rose }
+              - { label: "Slate and sky (blues)", value: slate }
+          - name: headingFont
+            label: Heading font
+            widget: select
+            default: serif
+            options:
+              - { label: "Serif (classic, with small strokes)", value: serif }
+              - { label: "Sans serif (clean and modern)", value: sans }
+              - { label: "Rounded (soft and friendly)", value: rounded }
+              - { label: "Typewriter", value: mono }
+          - name: bodyFont
+            label: Body font
+            widget: select
+            default: sans
+            options:
+              - { label: "Sans serif (easiest to read)", value: sans }
+              - { label: "Serif", value: serif }
+              - { label: "Rounded", value: rounded }
+              - { label: "Typewriter", value: mono }
+          - name: headingWeight
+            label: Heading thickness
+            widget: select
+            default: regular
+            options:
+              - { label: "Regular", value: regular }
+              - { label: "Light", value: light }
+              - { label: "Bold", value: bold }
+          - name: corners
+            label: Corner style
+            widget: select
+            default: soft
+            options:
+              - { label: "Softly rounded", value: soft }
+              - { label: "Square", value: square }
+              - { label: "Very rounded", value: round }
+
   # ---------------------------------------------------------------------------
   - name: pages
     label: Pages
@@ -104,7 +154,110 @@ collections:
       - { name: showInNav, label: Show in the top menu, widget: boolean, default: true }
       - { name: navOrder, label: Menu position, widget: number, default: 0, value_type: int, hint: "Lower numbers appear further left." }
       - { name: draft, label: Draft, widget: boolean, default: false, hint: "Turn on to hide this page from the live site while you work on it." }
-      - { name: body, label: Page content, widget: markdown }
+      - name: blocks
+        label: Page sections
+        label_singular: section
+        widget: list
+        required: false
+        hint: "Build the page by adding sections. Drag them by the handle to reorder."
+        types:
+          - name: text
+            label: Text
+            summary: "Text: {{fields.heading}}"
+            fields:
+              - { name: heading, label: Heading, widget: string, required: false }
+              - { name: text, label: Text, widget: markdown }
+              - name: width
+                label: Width
+                widget: select
+                default: narrow
+                options:
+                  - { label: "Narrow (easiest to read)", value: narrow }
+                  - { label: "Full width", value: wide }
+
+          - name: imageText
+            label: Text beside an image
+            summary: "Text and image: {{fields.heading}}"
+            fields:
+              - { name: heading, label: Heading, widget: string, required: false }
+              - { name: text, label: Text, widget: markdown, required: false }
+              - { name: image, label: Image, widget: image }
+              - name: imageSide
+                label: Put the image on the
+                widget: select
+                default: right
+                options:
+                  - { label: Right, value: right }
+                  - { label: Left, value: left }
+              - { name: linkLabel, label: Button text, widget: string, required: false, hint: "Leave blank for no button." }
+              - { name: linkUrl, label: Button goes to, widget: string, required: false }
+
+          - name: image
+            label: A single image
+            summary: "Image: {{fields.caption}}"
+            fields:
+              - { name: image, label: Image, widget: image }
+              - { name: caption, label: Caption, widget: string, required: false }
+              - name: width
+                label: Width
+                widget: select
+                default: wide
+                options:
+                  - { label: Full width, value: wide }
+                  - { label: Narrow, value: narrow }
+
+          - name: gallery
+            label: Photo gallery
+            summary: "Gallery: {{fields.heading}}"
+            fields:
+              - { name: heading, label: Heading, widget: string, required: false }
+              - name: columns
+                label: Photos per row
+                widget: select
+                default: 3
+                options:
+                  - { label: "2 (large)", value: 2 }
+                  - { label: "3 (medium)", value: 3 }
+                  - { label: "4 (small)", value: 4 }
+              - name: images
+                label: Photos
+                label_singular: photo
+                widget: list
+                fields:
+                  - { name: image, label: Photo, widget: image }
+                  - { name: caption, label: Caption, widget: string, required: false }
+
+          - name: quote
+            label: Pull quote
+            summary: "Quote: {{fields.quote}}"
+            fields:
+              - { name: quote, label: Quote, widget: text, hint: "Do not add quotation marks, they are added for you." }
+              - { name: attribution, label: Who said it, widget: string, required: false }
+
+          - name: cta
+            label: Call to action box
+            summary: "Call to action: {{fields.heading}}"
+            fields:
+              - { name: heading, label: Heading, widget: string }
+              - { name: text, label: Text, widget: text, required: false }
+              - { name: buttonLabel, label: Button text, widget: string, required: false }
+              - { name: buttonUrl, label: Button goes to, widget: string, required: false, hint: "For example /contact" }
+
+          - name: features
+            label: Row of cards
+            summary: "Cards: {{fields.heading}}"
+            fields:
+              - { name: heading, label: Heading, widget: string, required: false }
+              - name: items
+                label: Cards
+                label_singular: card
+                widget: list
+                summary: "{{fields.title}}"
+                fields:
+                  - { name: title, label: Title, widget: string }
+                  - { name: text, label: Text, widget: text, required: false }
+                  - { name: image, label: Small image, widget: image, required: false }
+      - { name: body, label: Extra text below the sections, widget: markdown, required: false, hint: "Usually left empty. Anything here appears underneath all the sections above." }
 
   # ---------------------------------------------------------------------------
   - name: posts

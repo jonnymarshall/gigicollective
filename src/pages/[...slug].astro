@@ -1,6 +1,7 @@
 ---
 import { getCollection, render } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
+import Blocks from '../components/Blocks.astro';
 
 export async function getStaticPaths() {
   const pages = await getCollection('pages', ({ data }) => !data.draft);
@@ -8,18 +9,31 @@ export async function getStaticPaths() {
 }
 
 const { page } = Astro.props;
+
+// A page is built from blocks. Anything typed into the markdown body still
+// renders underneath them, so older pages written before blocks existed keep
+// working rather than silently going blank.
 const { Content } = await render(page);
+const hasBlocks = page.data.blocks.length > 0;
 ---
 
 <BaseLayout title={page.data.title} description={page.data.description} image={page.data.heroImage || undefined}>
-  <article class="wrap" id={`page-${page.id}`}>
-    <header style="margin-bottom:2.5rem">
+  <article id={`page-${page.id}`}>
+    <header class="wrap" style="margin-bottom:2.5rem">
       <h1>{page.data.title}</h1>
       {page.data.description && <p class="lead">{page.data.description}</p>}
     </header>
+
     {page.data.heroImage && (
-      <img class="hero__image" src={page.data.heroImage} alt="" style="margin-bottom:2.5rem" />
+      <div class="wrap">
+        <img class="hero__image" src={page.data.heroImage} alt="" style="margin-bottom:2rem" />
+      </div>
     )}
-    <div class="prose"><Content /></div>
+
+    <Blocks blocks={page.data.blocks} />
+
+    {!hasBlocks && (
+      <div class="wrap"><div class="prose"><Content /></div></div>
+    )}
   </article>
 </BaseLayout>

@@ -1,0 +1,21 @@
+---
+interface Feature { title: string; text?: string; image?: string }
+interface Props { heading?: string; items?: Feature[] }
+const { heading, items = [] } = Astro.props;
+---
+{items.length > 0 && (
+  <section class="block block--features">
+    <div class="wrap">
+      {heading && <h2>{heading}</h2>}
+      <div class="feature-grid">
+        {items.map((item) => (
+          <div class="feature">
+            {item.image && <img src={item.image} alt="" loading="lazy" />}
+            <h3>{item.title}</h3>
+            {item.text && <p>{item.text}</p>}
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+)}
