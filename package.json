@@ -12,17 +12,21 @@
     "check": "astro check",
     "verify": "astro check && node scripts/check-cms-config.mjs && astro build",
     "astro": "astro",
-    "check:cms": "node scripts/check-cms-config.mjs"
+    "check:cms": "node scripts/check-cms-config.mjs",
+    "storyblok:push": "node scripts/push-storyblok-schema.mjs",
+    "storyblok:check": "node scripts/push-storyblok-schema.mjs --dry-run"
   },
   "dependencies": {
     "@astrojs/rss": "^4.0.19",
     "@astrojs/sitemap": "^3.7.3",
+    "@storyblok/astro": "^10.3.0",
     "astro": "^7.2.4",
     "marked": "^18.0.10"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.10",
     "js-yaml": "^5.3.0",
+    "storyblok-js-client": "^7.7.4",
     "typescript": "^6.0.3"
   },
   "private": true,
