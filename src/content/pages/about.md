@@ -45,4 +45,16 @@ blocks:
       - title: Some card
         text: Some text
         image: /images/uploads/images.jpeg
+  - type: gallery
+    heading: Some heading
+    columns: 4
+    images:
+      - image: /images/uploads/images.jpeg
+        caption: Some caption
+      - image: /images/uploads/images.jpeg
+        caption: Some cation
+      - image: /images/uploads/images.jpeg
+        caption: Some caption
+      - image: /images/uploads/images.jpeg
+        caption: Some caption
 ---
