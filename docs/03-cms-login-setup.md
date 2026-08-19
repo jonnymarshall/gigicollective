@@ -128,9 +128,11 @@ Cost: free. The free allowance is 100,000 runs a day. This will use maybe five.
      ```
      https://sveltia-cms-auth.jonnymarshall5.workers.dev/callback
      ```
-     The `/callback` is easy to miss and nothing works without it. The worker only answers on
-     `/callback` and `/oauth/redirect`, so the bare address will fail with a redirect
-     mismatch. It must match exactly, including the `https://` and no trailing slash.
+     **The `/callback` is the single most missed thing in this whole setup.** The Worker
+     serves `/callback` and `/oauth/redirect` and nothing at `/`, so the bare address gives a
+     404 partway through signing in. It sends no `redirect_uri` of its own, which means
+     GitHub uses whatever is registered here and there is no second chance to correct it.
+     Exact match, including the `https://`, and no trailing slash.
    - **Allow wildcard matching**: **off**. It would let tokens be sent to any subdomain or
      path under that address. There is exactly one valid destination here, so there is no
      reason to widen it.
@@ -177,6 +179,10 @@ website. Do not put them in the repo, do not email them, do not paste them into 
 | `GITHUB_CLIENT_ID` | the Client ID from 2b |
 | `GITHUB_CLIENT_SECRET` | the client secret from 2b |
 | `ALLOWED_DOMAINS` | `gigicollective.com` |
+
+Do not use type `Text` for any of them, including `ALLOWED_DOMAINS`. This was tried and it
+did not work: the Worker could not see the values, sign-in failed with "OAuth app client ID
+or secret is not configured", and switching all three to `Secret` fixed it.
 
 Why all three as Secret, when only one is really sensitive: Cloudflare preserves secrets
 across deploys ("Secrets not included in the file are preserved from the previous version"),
@@ -285,6 +291,7 @@ changing things once it still reports a problem.
 | Symptom | Cause |
 |---|---|
 | "Redirect URI mismatch" | The callback URL in 2b does not exactly match the worker address plus `/callback`. |
+| Sign-in reaches GitHub, then lands on a **404** at `workers.dev/?code=...` | The Redirect URI registered on the OAuth app is missing `/callback`. The Worker serves `/callback` and `/oauth/redirect`, and nothing at `/`. It sends no `redirect_uri` of its own, so GitHub uses whatever the app has registered. Fix the app, and delete any bare entry if you now have two. |
 | Login window opens then closes with nothing | `ALLOWED_DOMAINS` does not include the domain you are visiting from. |
 | **She** signs in fine but saving fails | She has not accepted the collaborator invite, or has Read access instead of Write. |
 | **She** cannot sign in at all, but you can | Her GitHub account is fine, but she was never invited, or the invite went to a different email than the account she made. |
