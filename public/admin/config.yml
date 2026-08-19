@@ -10,18 +10,17 @@
 
 backend:
   name: github
-  # CHANGE THIS to your GitHub username and repository name.
   repo: jonnymarshall/gigicollective
   branch: main
-  # CHANGE THIS to the Cloudflare Worker URL from docs/03-cms-login-setup.md
-  base_url: https://YOUR-WORKER-NAME.YOUR-SUBDOMAIN.workers.dev
+  # The Cloudflare Worker that handles signing in. See docs/03-cms-login-setup.md.
+  base_url: https://sveltia-cms-auth.jonnymarshall5.workers.dev
 
 # Where uploaded images are stored in the repository, and the address they are
 # served from on the live site.
 media_folder: public/images/uploads
 public_folder: /images/uploads
 
-# CHANGE THIS to the real domain. It powers the "View site" link in the editor.
+# Powers the "View site" link in the editor.
 site_url: https://gigicollective.com
 
 # No preview pane. The editor is simpler without one, and the live site is one

@@ -121,11 +121,25 @@ Cost: free. The free allowance is 100,000 runs a day. This will use maybe five.
      GitHub asks her to allow this app access, showing this name. Make it something she will
      recognise, so it does not look like a phishing screen.
    - **Homepage URL**: `https://gigicollective.com`
-   - **Authorization callback URL**: the worker address from 2a with `/callback` on the end:
+   - **Application description**: optional, but worth writing. She sees this on the one-time
+     "allow access?" screen, so a plain sentence makes it obviously legitimate:
+     `The content editor for gigicollective.com. Lets you publish pages and blog posts.`
+   - **Redirect URI**: the worker address with **`/callback`** on the end:
      ```
-     https://sveltia-cms-auth.something.workers.dev/callback
+     https://sveltia-cms-auth.jonnymarshall5.workers.dev/callback
      ```
-     This must match exactly, including the `https://`.
+     The `/callback` is easy to miss and nothing works without it. The worker only answers on
+     `/callback` and `/oauth/redirect`, so the bare address will fail with a redirect
+     mismatch. It must match exactly, including the `https://` and no trailing slash.
+   - **Allow wildcard matching**: **off**. It would let tokens be sent to any subdomain or
+     path under that address. There is exactly one valid destination here, so there is no
+     reason to widen it.
+   - **Enable Device Flow**: **off**. That is for signing in on devices without a browser,
+     like a TV. Not used here.
+   - **Expire user access tokens**: **off**. This one has a real consequence. Turning it on
+     makes her sign-in expire after 8 hours, and recovering from that needs refresh token
+     handling that this worker does not have. It reads the access token and nothing else. So
+     with this on she would be signed out roughly daily; with it off she stays signed in.
 5. Register the application.
 6. On the next screen, copy the **Client ID**.
 7. Click **Generate a new client secret** and copy that too. GitHub only shows the secret
