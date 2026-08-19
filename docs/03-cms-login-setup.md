@@ -75,7 +75,33 @@ Cost: free. The free allowance is 100,000 runs a day. This will use maybe five.
    `jonnymarshall`.** It will make a copy of the project under your own GitHub account, so a
    new `sveltia-cms-auth` repository will appear there. That is expected and correct. You can
    ignore it from then on.
-5. When it finishes, Cloudflare shows you a web address that looks like:
+5. Cloudflare shows a **Set up your application** form. Fill it in like this:
+
+   | Field | What to do |
+   |---|---|
+   | **Git account** | Choose **`jonnymarshall`**. This is the one field that really matters. |
+   | **Create private Git repository** | Leave it on. This copy of the worker has no reason to be public. Makes no difference to how it works. |
+   | Repository name | Leave as `sveltia-cms-auth`. |
+   | Build command | Leave as `pnpm run deploy`. That is the project's own deploy command. |
+   | Builds for non-production branches | Leave off. There is only ever one branch here. |
+   | Advanced settings (`npx wrangler versions upload`) | Leave alone. Only applies to the non-production branches you just turned off. |
+   | API token / **Create new token** | Leave it set to create one automatically. This is Cloudflare's own token so the build can publish the worker. Nothing for you to do. |
+   | **Variable value** (and any empty variable rows) | **Leave blank.** |
+
+6. **Leave every variable blank at this stage.** This looks wrong but is correct.
+
+   The worker's `wrangler.toml` declares no variables, so the form is not asking you for
+   anything it needs. More to the point, you could not fill them in yet even if you wanted
+   to: the client ID and secret come from the OAuth app in step 2b, and that app cannot be
+   registered until it has this worker's address for its callback URL. The worker has no
+   address until it is deployed.
+
+   So the order is forced: deploy empty now, register the app, come back and add the values
+   in 2c. The worker checks whether the credentials are present and returns a clear error if
+   they are not, so a half-configured worker simply does not log anyone in. It does not break
+   anything.
+
+7. Deploy. When it finishes, Cloudflare shows you a web address that looks like:
    ```
    https://sveltia-cms-auth.something.workers.dev
    ```
