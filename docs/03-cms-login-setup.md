@@ -3,59 +3,118 @@
 This is the one genuinely fiddly bit of the whole setup. It takes about fifteen minutes,
 you do it once, and then nobody thinks about it again.
 
-## Why it is needed at all
+**Every step in this document is done by you, on your own accounts, except step 2e.**
+She creates one thing (a free GitHub account) and does one thing (accepts an invite). She
+never signs into Cloudflare, never registers anything, and never sees a client secret.
 
-The editing page runs entirely in the browser. When she presses Publish, it needs to save
-files into your GitHub repository on her behalf, and GitHub will not let a web page do that
-without a proper login handshake.
+---
+
+## Who owns what
+
+| Thing | Whose account | Does she ever see it? |
+|---|---|---|
+| The Cloudflare account | **Yours** | No. Never. |
+| The login helper running on Cloudflare | **Yours** | No |
+| The GitHub OAuth app | **Yours** (`jonnymarshall`) | Only its name, on a one-time "allow access?" screen |
+| The `gigicollective` repository | **Yours** (`jonnymarshall`) | No |
+| The Client ID and client secret | **Yours**, they belong to the app | No. Never send her these. |
+| A GitHub account, used only to sign in at `/admin` | **Hers** | Yes, once at signup, then only the sign-in button |
+
+**Her total involvement is: sign up for GitHub once, accept one email invite, then use
+`gigicollective.com/admin` forever.**
+
+### The bit that confuses everyone
+
+You register **one** OAuth app. It is not "your login" or "her login". It is the website's
+login system, and it belongs to the site.
+
+Both of you then sign in **through** that one app using your own separate GitHub accounts.
+Think of it like the front door of a building: you install one door, and then several people
+use their own keys on it. The Client ID and secret are the door, not anybody's key.
+
+So there is no second setup to do for her. Once the door is installed, she just needs a key,
+which is her own GitHub account plus access to the repo.
+
+### A trap specific to your setup
+
+You have two GitHub accounts, `jonnymarshall` and `btckeybackup`. The repository is under
+**`jonnymarshall`**.
+
+Before starting, go to https://github.com and check the avatar in the top right corner. If it
+is `btckeybackup`, sign out and back in as `jonnymarshall`. If you register the OAuth app or
+connect Cloudflare under the wrong one, it will appear to work and then fail confusingly later.
+
+---
+
+## Why any of this is needed
+
+The editing page runs entirely in her browser. When she presses Publish, it has to save files
+into your GitHub repository, and GitHub will not let a web page do that without a proper
+login handshake.
 
 That handshake needs a tiny piece of code running on a server somewhere. It does nothing
 except pass the login back and forth. Cloudflare runs code like this for free, and this
-particular one already exists and is maintained by the Sveltia author, so there is nothing
-to write. You are just deploying someone else's ten-line program.
+particular one already exists and is maintained by the Sveltia author, so there is nothing to
+write. You are just deploying someone else's ten-line program.
 
 Cost: free. The free allowance is 100,000 runs a day. This will use maybe five.
 
-## What you need
-
-- A Cloudflare account (free, no card required)
-- Your GitHub account
+---
 
 ## 2a. Deploy the login helper
 
-1. Open https://github.com/sveltia/sveltia-cms-auth
-2. Click the **Deploy to Cloudflare** button in the README.
-3. Follow the prompts. It will ask to connect your GitHub account and will make a copy of
-   the project under your own account. That is expected.
-4. When it finishes, Cloudflare shows you a web address that looks like:
+> **You.** Your Cloudflare account, your GitHub account (`jonnymarshall`).
+> She is not involved and does not need a Cloudflare account, now or ever.
+
+1. If you do not already have one, create a free Cloudflare account at
+   https://dash.cloudflare.com/sign-up. No card required. **This is your account, in your
+   name, with your email.**
+2. Open https://github.com/sveltia/sveltia-cms-auth
+3. Click the **Deploy to Cloudflare** button in the README.
+4. Follow the prompts. It will ask to connect your GitHub account. **Connect
+   `jonnymarshall`.** It will make a copy of the project under your own GitHub account, so a
+   new `sveltia-cms-auth` repository will appear there. That is expected and correct. You can
+   ignore it from then on.
+5. When it finishes, Cloudflare shows you a web address that looks like:
    ```
    https://sveltia-cms-auth.something.workers.dev
    ```
    **Copy that address.** It is needed twice below.
 
-## 2b. Tell GitHub about it
+## 2b. Register the OAuth app
+
+> **You.** Signed in to GitHub as `jonnymarshall`.
+> This registers the website's login system, once, for everybody who will ever use it.
 
 1. Go to https://github.com/settings/developers
-2. **OAuth Apps** → **New OAuth App**
-3. Fill in:
-   - Application name: `Website editor`
-   - Homepage URL: your site address, for example `https://gigicollective.com`
-   - Authorization callback URL: the worker address from 2a with `/callback` on the end, so:
+2. Check the top right avatar says `jonnymarshall` before continuing.
+3. **OAuth Apps** → **New OAuth App**
+4. Fill in:
+   - **Application name**: `Gigi Collective website editor`
+     This is the only part of this step she will ever see. The first time she signs in,
+     GitHub asks her to allow this app access, showing this name. Make it something she will
+     recognise, so it does not look like a phishing screen.
+   - **Homepage URL**: `https://gigicollective.com`
+   - **Authorization callback URL**: the worker address from 2a with `/callback` on the end:
      ```
      https://sveltia-cms-auth.something.workers.dev/callback
      ```
      This must match exactly, including the `https://`.
-4. Register the application.
-5. On the next screen, copy the **Client ID**.
-6. Click **Generate a new client secret** and copy that too. GitHub only shows the secret
+5. Register the application.
+6. On the next screen, copy the **Client ID**.
+7. Click **Generate a new client secret** and copy that too. GitHub only shows the secret
    once, so paste it somewhere before you navigate away.
+
+**These two values are yours and stay yours.** They go into your Cloudflare account in the
+next step and nowhere else. She never needs them, and anyone who has them can sign in as the
+website. Do not put them in the repo, do not email them, do not paste them into a chat.
 
 ## 2c. Give the helper the two values
 
-Back in Cloudflare:
+> **You.** Your Cloudflare account.
 
 1. **Workers & Pages** → click `sveltia-cms-auth` → **Settings** → **Variables and Secrets**
-2. Add these:
+2. Add these three:
 
 | Name | Value | Type |
 |---|---|---|
@@ -63,12 +122,17 @@ Back in Cloudflare:
 | `GITHUB_CLIENT_SECRET` | the client secret from 2b | **Secret** (encrypted) |
 | `ALLOWED_DOMAINS` | `gigicollective.com` | Plain text |
 
-`ALLOWED_DOMAINS` matters. Without it, anyone who finds the worker address could point their
-own editing page at it. With it, the login only works from your domain.
+Set the secret as type **Secret**, not plain text, so Cloudflare encrypts it and stops
+displaying it back to you.
+
+`ALLOWED_DOMAINS` matters. Without it, anyone who found the worker address could point their
+own editing page at it. With it, the login only works when the request comes from your domain.
 
 3. Save, then **Deploy** so the new values take effect.
 
-## 2d. Point the editor at it
+## 2d. Point the editor at the helper
+
+> **You.** A code change, so it is yours by definition. She never edits this file.
 
 In `public/admin/config.yml`, set `base_url` to the worker address (no `/callback` this time):
 
@@ -80,22 +144,51 @@ backend:
   base_url: https://sveltia-cms-auth.something.workers.dev
 ```
 
+Note there is no client secret in this file, and there must never be. This file is public.
+Only the worker address goes here, which is safe to publish.
+
 Commit and push.
 
-## 2e. Give her access
+## 2e. Her one and only setup task
 
-She needs a free GitHub account. She signs up at https://github.com/signup and sends you
-her username. That is the only time she ever needs to look at GitHub.
+> **Her**, for the account. **You**, for the invite.
 
-Then, in your repository: **Settings** → **Collaborators** → **Add people** → her username,
-with **Write** access. She gets an email invite and has to click accept, once.
+This is the only step she takes part in.
+
+**She does:**
+1. Signs up for a free GitHub account at https://github.com/signup, using her own email
+   address and her own password. **This account is hers.** You do not need her password and
+   should not ask for it.
+2. Sends you her username.
+
+That is the last time she needs to think about GitHub as a thing. From then on it is just the
+button she clicks to get into the editor.
+
+**You do:**
+3. In https://github.com/jonnymarshall/gigicollective → **Settings** → **Collaborators** →
+   **Add people** → her username → give her **Write** access.
+
+   Write is the minimum that allows saving. There is no narrower setting that still lets the
+   CMS publish. It does technically let her edit code through the GitHub website, but she has
+   no reason to go there and will not be shown it by anything she uses.
+
+**She does:**
+4. Opens the invite email from GitHub and clicks accept. One click, once.
 
 ## Testing it
 
-Go to `https://gigicollective.com/admin/` and click **Sign In with GitHub**. If it lets you in
-and shows Site settings, Pages, Blog posts and Work down the left, it is working.
+> **You first, then her.** Two different tests. Do both.
 
-Have her do the same on her own machine before you call it done.
+**Your test:** go to `https://gigicollective.com/admin/` and click **Sign In with GitHub**.
+You will be signed in as `jonnymarshall`. If it lets you in and shows Site settings, Pages,
+Blog posts and Work down the left hand side, the helper and the OAuth app are working.
+
+**Her test:** she does exactly the same thing, on her own computer, signed into GitHub as
+herself. This is the test that actually matters, because it is the one that proves the
+collaborator invite and her access work. Yours passing proves nothing about hers.
+
+Ask her to make a real change, a typo fix on the About page is ideal, and press Publish. Wait
+a minute or two and check it appears on the live site. Only then is this step finished.
 
 ## If something goes wrong
 
@@ -103,14 +196,27 @@ Have her do the same on her own machine before you call it done.
 |---|---|
 | "Redirect URI mismatch" | The callback URL in 2b does not exactly match the worker address plus `/callback`. |
 | Login window opens then closes with nothing | `ALLOWED_DOMAINS` does not include the domain you are visiting from. |
-| Signs in, but saving fails | She has not accepted the collaborator invite, or has Read access instead of Write. |
+| **She** signs in fine but saving fails | She has not accepted the collaborator invite, or has Read access instead of Write. |
+| **She** cannot sign in at all, but you can | Her GitHub account is fine, but she was never invited, or the invite went to a different email than the account she made. |
+| You registered things under the wrong account | Check whether the OAuth app is listed under `jonnymarshall` at https://github.com/settings/developers. If it is under `btckeybackup`, delete it and redo 2b as `jonnymarshall`. |
 | Editor page is blank | `config.yml` has a formatting error. YAML is picky about indentation. Check the browser console. |
 
 ## Local testing without any of this
 
+> **You only.** This is a developer shortcut and is not something she uses.
+
 While developing on your own machine, `/admin/index.html` offers **Work with Local
-Repository**. Click it, pick the `gigicollective` folder, and you can try the editor with no
-login and no worker at all. Changes save straight to the files on disk.
+Repository**. Click it, pick the project folder, and you can try the editor with no login, no
+worker, and no GitHub at all. Changes save straight to the files on disk.
 
 Note the `index.html` on the end. The local dev server needs it. On the live site plain
 `/admin/` works.
+
+## What to actually send her
+
+Nothing from this document. Send her [05-guide-for-the-editor.md](05-guide-for-the-editor.md)
+once the testing above passes, plus:
+
+- the address `gigicollective.com/admin`
+- a heads-up that the first time she signs in, GitHub will ask her to allow
+  "Gigi Collective website editor" access, and that she should say yes

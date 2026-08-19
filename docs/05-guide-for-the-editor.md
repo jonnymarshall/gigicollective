@@ -4,9 +4,16 @@ This is the only page you need. Nothing here can break anything.
 
 ## Getting in
 
-Go to **gigicollective.com/admin** and sign in with GitHub. Bookmark that address.
+Go to **gigicollective.com/admin** and click **Sign In with GitHub**. Bookmark that address.
 
-You will stay signed in, so most of the time it opens straight to the editor.
+Sign in with your own GitHub account, the one you set up with your own email and password.
+It is yours, not a shared one.
+
+The very first time, GitHub will ask whether you want to allow "Gigi Collective website
+editor" to have access. Say yes. That is the website asking permission to save your work, and
+it only asks once.
+
+After that you stay signed in, so most of the time it opens straight to the editor.
 
 ## What the sections are
 
