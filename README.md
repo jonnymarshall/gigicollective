@@ -68,7 +68,8 @@ Then open http://localhost:4321
 | `npm run dev` | Local preview with live reload |
 | `npm run build` | Build the site into `dist/`. This is what CI runs |
 | `npm run check` | Type check only |
-| `npm run verify` | Type check and build. Run this before pushing |
+| `npm run verify` | Type check, validate the CMS config, and build. Run this before pushing |
+| `npm run check:cms` | Validate `public/admin/config.yml` on its own. A broken one gives her a blank editor with no error |
 
 To try the editor locally, open http://localhost:4321/admin/index.html and choose **Work with
 Local Repository**. No login needed, changes save to disk.
@@ -98,6 +99,14 @@ public/
 **1. Content fields live in two files.** `src/content.config.ts` says what a post is allowed
 to contain. `public/admin/config.yml` says what she sees when editing one. Add a field to one
 and you must add it to the other, or they disagree and the build fails.
+
+Page sections live in **three** places: the schema in `src/content.config.ts`, a component in
+`src/components/blocks/`, and a branch in `src/components/Blocks.astro`. The switch statement
+in `Blocks.astro` is written out rather than looked up in a map precisely so that forgetting
+one of these fails the build instead of silently dropping the section.
+
+Design options live in `src/lib/theme.ts` and must have a matching entry in the `Look and
+feel` fields of `config.yml`.
 
 **2. Restyle from the top of `global.css`.** The colours, fonts and spacing are all CSS
 variables defined in one block at the top. Changing those restyles the whole site without

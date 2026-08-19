@@ -15,12 +15,18 @@ it only asks once.
 
 After that you stay signed in, so most of the time it opens straight to the editor.
 
+While you are editing, a **preview** panel shows the content taking shape beside the fields.
+It shows what you have written, not the finished styling, so treat it as a check that nothing
+is missing rather than a picture of the final page. To see the real thing, publish and look at
+the site.
+
 ## What the sections are
 
 Down the left hand side there are four things:
 
-**Site settings**: things that show up on every page. The site name, the footer, your
-contact email, and everything on the front page. Two entries: *General* and *Front page*.
+**Site settings**: things that show up on every page. Three entries: *General* (site name,
+footer, contact details), *Front page* (everything on the home page), and *Look and feel*
+(colours and fonts for the whole site).
 
 **Pages**: standalone pages like About or Contact. These are the ones that appear in the
 menu at the top of the site.
@@ -57,6 +63,59 @@ it **off** to make it visible. A draft is saved and safe, it just does not appea
 
 **Menu position** (Pages only): a number. Lower numbers sit further to the left in the top
 menu. So `1` is first, `2` is second.
+
+## Building a page out of sections
+
+Pages are not one long block of text. You build them by stacking **sections**, and you can
+add as many as you like in any order.
+
+Open a page, scroll to **Page sections**, and click to add one. The choices are:
+
+| Section | What it does |
+|---|---|
+| **Text** | Words. Optionally with a heading. Choose narrow (easier to read) or full width. |
+| **Text beside an image** | Words on one side, a picture on the other. You choose which side the picture goes, so you can alternate down the page. |
+| **A single image** | One picture, full width or narrow, with an optional caption. |
+| **Photo gallery** | A grid of pictures. Choose 2, 3 or 4 per row. |
+| **Pull quote** | A short line made big. Do not type quotation marks, they are added for you. |
+| **Call to action box** | A tinted box with a heading, a line of text and a button. Good at the bottom of a page. |
+| **Row of cards** | Two to four small cards side by side, each with a title and a little text. Good for listing services. |
+
+**Reordering** is drag and drop. Grab the handle on a section and move it up or down.
+
+**Deleting** a section removes only that section, not the page.
+
+You cannot make a page look broken this way. Every section is designed to work on its own, to
+sit next to any other section, and to rearrange itself sensibly on a phone.
+
+### Which sections to use
+
+A page reads better with variety. A good pattern for a services or about page:
+
+1. Text (an introduction)
+2. Text beside an image
+3. Row of cards (what you offer)
+4. Pull quote (a testimonial)
+5. Call to action box (get in touch)
+
+Avoid five text sections in a row. If a page is all words, use one text section and let it
+run, rather than chopping it up for no reason.
+
+## Changing the colours and fonts
+
+**Site settings** → **Look and feel** changes the entire site at once.
+
+- **Colour scheme**: five options, from warm browns through greens, blues and pinks
+- **Heading font** and **Body font**: serif, sans serif, rounded or typewriter
+- **Heading thickness**: light, regular or bold
+- **Corner style**: how rounded the corners of images and boxes are
+
+Every combination has been checked, so there is no way to pick something that looks wrong or
+becomes unreadable. Change it, publish, and look at the site. If you do not like it, change it
+back. Nothing is permanent.
+
+One suggestion: pick the colour scheme first and live with it for a few days before changing
+the fonts too. Changing everything at once makes it hard to tell what you actually dislike.
 
 ## Adding pictures
 
