@@ -100,24 +100,34 @@ The three variable names the scripts expect are `STORYBLOK_SPACE_ID`,
 
 ## Then, in order
 
-1. Push the component schema into the space
-2. Rewire Astro to fetch from Storyblok instead of markdown files
-3. Wire up the visual editor bridge, so clicking the page opens the right field
-4. Point Storyblok's preview at `new.gigicollective.com`
-5. Move the existing content across. There is very little of it, so this is quick
-6. Add a Storyblok webhook so publishing triggers a rebuild, replacing the git commit
-7. Delete the Sveltia admin, the Cloudflare worker, the OAuth app, and `docs/03`
-8. Have her use it properly for a few days before anything is deleted for good
+- [ ] 1. Push the component schema into the space
+- [ ] 2. Rewire Astro to fetch from Storyblok instead of markdown files
+- [ ] 3. Wire up the visual editor bridge, so clicking the page opens the right field
+- [ ] 4. Point Storyblok's preview at `new.gigicollective.com`
+- [ ] 5. Move the existing content across. There is very little of it, so this is quick
+- [ ] 6. **Build the content backup job.** See "Backups" above. Do not skip this
+- [ ] 7. Add a Storyblok webhook so publishing triggers a rebuild, replacing the git commit
+- [ ] 8. Have her use it properly for a few days
+- [ ] 9. Only then delete the Sveltia admin, the Cloudflare worker, the OAuth app, and `docs/03`
 
-Step 7 happens last and only once she has confirmed the new editor works for her.
-Until then both exist side by side and nothing is lost.
+Step 9 happens last and only once she has confirmed the new editor works for her.
+Until then both editors exist side by side and nothing is lost.
 
-## Backups
+## Backups: AGREED, NOT YET BUILT
 
 Content will live on Storyblok's servers rather than in your repo. That is the real
-trade for the visual editing. Their free tier has no automated export, so once
-there is real content worth protecting, a scheduled job that pulls the whole space
-to JSON and commits it here is worth adding. Ask me for it when the content is in.
+trade for the visual editing, and their free tier has **no automated export**. If the
+account is lost or the free tier changes, there is no copy of her writing anywhere.
+
+**Jonny has asked for this and it is owed.** A scheduled GitHub Action that pulls the
+whole space to JSON and commits it to this repo, so the content is versioned here
+even though it is authored there.
+
+Build it at **step 6**, right after the first real content lands, and before the
+HostGator site is cancelled. Not earlier, because there is nothing to back up yet,
+and not later, because "later" is how content gets lost.
+
+Tracked in the checklist above so it cannot be quietly skipped.
 
 ## The one-seat limit
 
