@@ -11,7 +11,7 @@
 backend:
   name: github
   # CHANGE THIS to your GitHub username and repository name.
-  repo: YOUR-GITHUB-USERNAME/YOUR-REPO-NAME
+  repo: jonnymarshall/gigicollective
   branch: main
   # CHANGE THIS to the Cloudflare Worker URL from docs/03-cms-login-setup.md
   base_url: https://YOUR-WORKER-NAME.YOUR-SUBDOMAIN.workers.dev
@@ -22,7 +22,7 @@ media_folder: public/images/uploads
 public_folder: /images/uploads
 
 # CHANGE THIS to the real domain. It powers the "View site" link in the editor.
-site_url: https://example.com
+site_url: https://gigicollective.com
 
 # No preview pane. The editor is simpler without one, and the live site is one
 # click away.

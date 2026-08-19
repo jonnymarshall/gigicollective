@@ -3,8 +3,7 @@ import { getCollection } from 'astro:content';
 import { formatDate } from '../lib/date';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PostCard from '../components/PostCard.astro';
-import site from '../data/site.json';
-import home from '../data/home.json';
+import { site, home } from '../lib/site-data';
 
 const latestPosts = site.showBlog && home.showLatestPosts
   ? (await getCollection('posts', ({ data }) => !data.draft))

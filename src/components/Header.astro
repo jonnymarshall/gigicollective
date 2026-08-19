@@ -1,6 +1,6 @@
 ---
 import { getCollection } from 'astro:content';
-import site from '../data/site.json';
+import { site } from '../lib/site-data';
 
 const navPages = (await getCollection('pages', ({ data }) => !data.draft && data.showInNav))
   .sort((a, b) => a.data.navOrder - b.data.navOrder);
