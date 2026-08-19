@@ -259,6 +259,27 @@ collaborator invite and her access work. Yours passing proves nothing about hers
 Ask her to make a real change, a typo fix on the About page is ideal, and press Publish. Wait
 a minute or two and check it appears on the live site. Only then is this step finished.
 
+## Checking the helper without the dashboard
+
+Run this any time sign-in misbehaves:
+
+```bash
+sh scripts/check-login-helper.sh
+```
+
+It asks the Worker two questions from outside and tells you whether the three variables
+actually reached it. This is far more reliable than looking at the Cloudflare dashboard,
+because the dashboard shows what you typed, not what the running Worker can see. Those are
+not the same thing until a deploy has finished.
+
+It works by sending a deliberately bogus domain. If `ALLOWED_DOMAINS` is doing its job, that
+gets rejected. If the bogus domain sails through, the variable is not reaching the Worker,
+and the Worker is currently unprotected.
+
+One thing this catches that nothing else does: values can take a minute or two to take effect
+after Deploy. If sign-in fails immediately after saving, wait, run the script, and only start
+changing things once it still reports a problem.
+
 ## If something goes wrong
 
 | Symptom | Cause |
@@ -268,6 +289,7 @@ a minute or two and check it appears on the live site. Only then is this step fi
 | **She** signs in fine but saving fails | She has not accepted the collaborator invite, or has Read access instead of Write. |
 | **She** cannot sign in at all, but you can | Her GitHub account is fine, but she was never invited, or the invite went to a different email than the account she made. |
 | You registered things under the wrong account | Check whether the OAuth app is listed under `jonnymarshall` at https://github.com/settings/developers. If it is under `btckeybackup`, delete it and redo 2b as `jonnymarshall`. |
+| "OAuth app client ID or secret is not configured" | The variables are not reaching the Worker. Run `scripts/check-login-helper.sh`. If it also reports `ALLOWED_DOMAINS` missing, all three are absent, so it is a location or deploy problem rather than a typo. Most likely they went into the Build section, or Deploy was not clicked, or the deploy has not finished propagating yet. |
 | Editor page is blank | `config.yml` has a formatting error. YAML is picky about indentation. Check the browser console. |
 
 ## Local testing without any of this
