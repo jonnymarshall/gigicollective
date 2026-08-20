@@ -1,0 +1,21 @@
+---
+import type { SbBlokData } from '@storyblok/astro';
+
+// Shown when Storyblok holds a section this site has no component for, which
+// happens if the schema is pushed but the code is not yet deployed. Visible in
+// the editor, silent on the live site, so a half-finished deploy never shows a
+// visitor a broken box.
+interface Props { blok: SbBlokData }
+const { blok } = Astro.props;
+const isEditor = import.meta.env.DEV;
+---
+{isEditor && (
+  <div class="band band--tint pt-sm pb-sm">
+    <div class="wrap">
+      <p class="empty-state">
+        This site does not yet know how to display a “{blok.component}” section.
+        It will not appear on the live site.
+      </p>
+    </div>
+  </div>
+)}

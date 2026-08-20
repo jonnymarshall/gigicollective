@@ -1,0 +1,20 @@
+---
+import { storyblokEditable } from '@storyblok/astro';
+import type { SbBlokData } from '@storyblok/astro';
+import { assetUrl, assetAlt, ratioClass } from '../lib/blok-style';
+
+interface Props { blok: SbBlokData; ratio?: unknown }
+const { blok, ratio } = Astro.props;
+const image = assetUrl(blok.image);
+---
+{image && (
+  <figure {...storyblokEditable(blok)}>
+    <img
+      class={ratioClass(ratio ?? 'portrait')}
+      src={image}
+      alt={assetAlt(blok.image, String(blok.caption ?? ''))}
+      loading="lazy"
+    />
+    {blok.caption && <figcaption>{blok.caption}</figcaption>}
+  </figure>
+)}

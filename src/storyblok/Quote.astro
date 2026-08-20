@@ -1,0 +1,25 @@
+---
+import { storyblokEditable } from '@storyblok/astro';
+import type { SbBlokData } from '@storyblok/astro';
+import { blockClasses } from '../lib/blok-style';
+
+interface Props { blok: SbBlokData }
+const { blok } = Astro.props;
+const size = ['normal', 'large', 'xlarge'].includes(String(blok.size)) ? blok.size : 'large';
+---
+{blok.quote && (
+  <section {...storyblokEditable(blok)} class={blockClasses(blok, 'block--quote')}>
+    <div class="wrap">
+      {blok.eyebrow && <p class="eyebrow">{blok.eyebrow}</p>}
+      <figure class:list={['quote', `quote--${size}`]}>
+        <span class="quote__mark" aria-hidden="true">&ldquo;</span>
+        <blockquote>{blok.quote}</blockquote>
+        {blok.attribution && (
+          <figcaption>
+            {blok.attribution}{blok.role && <><br />{blok.role}</>}
+          </figcaption>
+        )}
+      </figure>
+    </div>
+  </section>
+)}

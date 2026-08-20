@@ -1,0 +1,17 @@
+---
+import { storyblokEditable } from '@storyblok/astro';
+import type { SbBlokData } from '@storyblok/astro';
+
+interface Props { blok: SbBlokData }
+const { blok } = Astro.props;
+
+const SIZES = { none: '0', sm: '1.5rem', md: '4rem', lg: '7rem', xl: '11rem' } as const;
+const height = SIZES[blok.size as keyof typeof SIZES] ?? SIZES.md;
+const BACKGROUNDS = { bg: 'band--bg', tint: 'band--tint', dark: 'band--dark' } as const;
+const background = BACKGROUNDS[blok.background as keyof typeof BACKGROUNDS] ?? BACKGROUNDS.bg;
+---
+<div {...storyblokEditable(blok)} class:list={['band', background]} style={`padding-block:${height}`}>
+  {blok.line && (
+    <div class="wrap"><hr style="border:0;border-top:1px solid var(--c-line);margin:0" /></div>
+  )}
+</div>

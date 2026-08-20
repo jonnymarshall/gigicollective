@@ -1,0 +1,30 @@
+---
+import { storyblokEditable } from '@storyblok/astro';
+import type { SbBlokData } from '@storyblok/astro';
+import { assetUrl, assetAlt } from '../lib/blok-style';
+
+interface Props { blok: SbBlokData }
+const { blok } = Astro.props;
+
+const image = assetUrl(blok.image);
+const height = ['short', 'tall', 'full'].includes(String(blok.height)) ? blok.height : 'tall';
+const overlay = ['none', 'light', 'medium', 'heavy'].includes(String(blok.overlay)) ? blok.overlay : 'medium';
+---
+<section
+  {...storyblokEditable(blok)}
+  class:list={['hero', `hero--${height}`, `hero--overlay-${overlay}`]}
+>
+  {image && <img class="hero__media" src={image} alt={assetAlt(blok.image)} />}
+  <div class="hero__inner">
+    <div class="wrap">
+      <div class="hero__content">
+        {blok.heading && <h1 class="display">{blok.heading}</h1>}
+        {blok.eyebrow && <p class="eyebrow" style="margin-top:1.5rem">{blok.eyebrow}</p>}
+        {blok.body && <p style="max-width:28rem">{blok.body}</p>}
+        {blok.button_label && blok.button_link && (
+          <a class="button" href={String(blok.button_link)}>{blok.button_label}</a>
+        )}
+      </div>
+    </div>
+  </div>
+</section>

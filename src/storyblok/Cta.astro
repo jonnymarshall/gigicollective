@@ -1,0 +1,26 @@
+---
+import { storyblokEditable } from '@storyblok/astro';
+import type { SbBlokData } from '@storyblok/astro';
+import { blockClasses, assetUrl, assetAlt } from '../lib/blok-style';
+
+interface Props { blok: SbBlokData }
+const { blok } = Astro.props;
+const image = assetUrl(blok.image);
+---
+<section {...storyblokEditable(blok)} class={blockClasses(blok, 'block--cta')}>
+  <div class="wrap">
+    <div class={image ? 'split' : ''}>
+      {image && <img src={image} alt={assetAlt(blok.image)} loading="lazy" />}
+      <div>
+        {blok.eyebrow && <p class="eyebrow">{blok.eyebrow}</p>}
+        {blok.heading && <h2>{blok.heading}</h2>}
+        {blok.body && <p class="lead" style="margin-top:1.5rem">{blok.body}</p>}
+        {blok.button_label && blok.button_link && (
+          <p style="margin-top:2rem">
+            <a class="button" href={String(blok.button_link)}>{blok.button_label}</a>
+          </p>
+        )}
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,23 @@
+---
+import { storyblokEditable } from '@storyblok/astro';
+import StoryblokComponent from '@storyblok/astro/StoryblokComponent.astro';
+import type { SbBlokData } from '@storyblok/astro';
+import { blockClasses } from '../lib/blok-style';
+
+interface Props { blok: SbBlokData }
+const { blok } = Astro.props;
+
+const items = (blok.items ?? []) as SbBlokData[];
+const LAYOUTS = ['1-1', '1-1-1', '1-1-1-1', '1-2', '2-1'];
+const layout = LAYOUTS.includes(String(blok.layout)) ? blok.layout : '1-1';
+const valign = ['top', 'middle', 'bottom'].includes(String(blok.vertical_align)) ? blok.vertical_align : 'top';
+---
+{items.length > 0 && (
+  <section {...storyblokEditable(blok)} class={blockClasses(blok, 'block--columns')}>
+    <div class="wrap">
+      <div class:list={['columns-grid', `cols-${layout}`, `va-${valign}`]}>
+        {items.map((item) => <StoryblokComponent blok={item} />)}
+      </div>
+    </div>
+  </section>
+)}

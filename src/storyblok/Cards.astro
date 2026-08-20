@@ -1,0 +1,32 @@
+---
+import { storyblokEditable } from '@storyblok/astro';
+import StoryblokComponent from '@storyblok/astro/StoryblokComponent.astro';
+import type { SbBlokData } from '@storyblok/astro';
+import { blockClasses } from '../lib/blok-style';
+
+interface Props { blok: SbBlokData }
+const { blok } = Astro.props;
+const items = (blok.items ?? []) as SbBlokData[];
+const dividers = blok.dividers !== false;
+---
+{items.length > 0 && (
+  <section
+    {...storyblokEditable(blok)}
+    class={blockClasses(blok, `block--features ${dividers ? '' : 'cards--plain'}`)}
+  >
+    <div class="wrap">
+      <div class="aside-grid">
+        <div>
+          {blok.eyebrow && <p class="eyebrow">{blok.eyebrow}</p>}
+          {blok.heading && <h2>{blok.heading}</h2>}
+          <hr class="rule" />
+        </div>
+        <div class="column-set">
+          {items.map((item, i) => (
+            <StoryblokComponent blok={item} index={i} numbered={blok.numbered === true} />
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+)}

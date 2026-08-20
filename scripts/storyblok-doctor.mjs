@@ -94,11 +94,17 @@ if (res.ok) {
 // Preview token: used at build time to read content.
 console.log('\nPreview token');
 const cdn = await fetch(
-  `${REGIONS[region].cdn}/cdn/stories?version=draft&per_page=1&token=${previewToken}`,
+  `${REGIONS[region].cdn}/cdn/stories?version=draft&per_page=100&token=${previewToken}`,
 );
 if (cdn.ok) {
   const stories = (await cdn.json()).stories ?? [];
-  ok(`can read content (${stories.length ? stories.length + ' story found' : 'space is empty, which is expected before the migration'})`);
+  ok(`can read content (${stories.length} stories in the space)`);
+
+  const ours = stories.filter((s) => s.content?.component === 'page').length;
+  const demo = stories.length - ours;
+  if (ours) ok(`${ours} of them use our "page" type and will appear on the site`);
+  else console.log('  · none use our "page" type yet, so no Storyblok pages are on the site');
+  if (demo) console.log(`  · ${demo} are Storyblok's demo content and are ignored`);
 } else {
   fail(`cannot read content: ${cdn.status} ${cdn.statusText}`);
   console.log('    Fix: use the Preview token from Settings > Access Tokens, not the Public one.');

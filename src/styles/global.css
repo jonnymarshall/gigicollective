@@ -548,3 +548,66 @@ main { flex: 1; }
   html { scroll-behavior: auto; }
   *, *::before, *::after { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; }
 }
+
+/* ---------------------------------------------------------------------------
+   Section style controls, set per section in Storyblok.
+   --------------------------------------------------------------------------- */
+.pt-none { padding-top: 0; }
+.pt-sm   { padding-top: clamp(1.25rem, 2.5vw, 2rem); }
+.pt-md   { padding-top: var(--band-space); }
+.pt-lg   { padding-top: calc(var(--band-space) * 1.45); }
+.pt-xl   { padding-top: calc(var(--band-space) * 2); }
+
+.pb-none { padding-bottom: 0; }
+.pb-sm   { padding-bottom: clamp(1.25rem, 2.5vw, 2rem); }
+.pb-md   { padding-bottom: var(--band-space); }
+.pb-lg   { padding-bottom: calc(var(--band-space) * 1.45); }
+.pb-xl   { padding-bottom: calc(var(--band-space) * 2); }
+
+.is-centred { text-align: center; }
+.is-centred .lead,
+.is-centred .prose { margin-inline: auto; }
+.is-centred .rule { margin-inline: auto; }
+.is-centred .split { text-align: left; }
+
+/* Content width, applied to the inner wrapper. */
+.w-narrow > .wrap { max-width: 46rem; }
+.w-normal > .wrap { max-width: var(--page-max); }
+.w-wide   > .wrap { max-width: 1440px; }
+.w-full   > .wrap { max-width: none; padding-inline: 0; }
+
+/* Image shapes. */
+.ratio-square    { aspect-ratio: 1 / 1; object-fit: cover; }
+.ratio-portrait  { aspect-ratio: 4 / 5; object-fit: cover; }
+.ratio-landscape { aspect-ratio: 3 / 2; object-fit: cover; }
+.ratio-banner    { aspect-ratio: 21 / 9; object-fit: cover; }
+
+/* Columns, the free composition section. */
+.columns-grid { display: grid; gap: clamp(1.5rem, 3.5vw, 3rem); grid-template-columns: 1fr; }
+.columns-grid.va-top    { align-items: start; }
+.columns-grid.va-middle { align-items: center; }
+.columns-grid.va-bottom { align-items: end; }
+@media (min-width: 820px) {
+  .columns-grid.cols-1-1     { grid-template-columns: 1fr 1fr; }
+  .columns-grid.cols-1-1-1   { grid-template-columns: repeat(3, 1fr); }
+  .columns-grid.cols-1-1-1-1 { grid-template-columns: repeat(4, 1fr); }
+  .columns-grid.cols-1-2     { grid-template-columns: 1fr 2fr; }
+  .columns-grid.cols-2-1     { grid-template-columns: 2fr 1fr; }
+}
+/* Sections nested inside a column must not add their own band padding. */
+.columns-grid .band { padding-block: 0; background: none; color: inherit; }
+.columns-grid .band > .wrap { max-width: none; padding-inline: 0; }
+
+.quote--normal blockquote { font-size: clamp(1.05rem, 1.8vw, 1.3rem); }
+.quote--xlarge blockquote { font-size: clamp(1.5rem, 3.4vw, 2.6rem); }
+
+.hero--short { min-height: clamp(20rem, 46vh, 28rem); }
+.hero--full  { min-height: 100vh; }
+.hero--overlay-none::after   { background: none; }
+.hero--overlay-light::after  { background: linear-gradient(100deg, rgba(30,25,20,0.55) 0%, rgba(30,25,20,0.25) 60%, rgba(30,25,20,0.05) 100%); }
+.hero--overlay-heavy::after  { background: linear-gradient(100deg, rgba(30,25,20,0.92) 0%, rgba(30,25,20,0.72) 55%, rgba(30,25,20,0.4) 100%); }
+
+.cards--plain .column-set > * + * { border-left: 0; }
+@media (max-width: 700px) {
+  .cards--plain .column-set > * + * { border-top: 0; }
+}

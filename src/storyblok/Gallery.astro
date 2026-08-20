@@ -1,0 +1,24 @@
+---
+import { storyblokEditable } from '@storyblok/astro';
+import StoryblokComponent from '@storyblok/astro/StoryblokComponent.astro';
+import type { SbBlokData } from '@storyblok/astro';
+import { blockClasses, ratioClass } from '../lib/blok-style';
+
+interface Props { blok: SbBlokData }
+const { blok } = Astro.props;
+
+const images = (blok.images ?? []) as SbBlokData[];
+const columns = String(blok.columns ?? '3');
+const min = columns === '2' ? '360px' : columns === '4' ? '200px' : '260px';
+---
+{images.length > 0 && (
+  <section {...storyblokEditable(blok)} class={blockClasses(blok, 'block--gallery')}>
+    <div class="wrap">
+      {blok.eyebrow && <p class="eyebrow">{blok.eyebrow}</p>}
+      {blok.heading && <h2 style="margin-bottom:2.5rem">{blok.heading}</h2>}
+      <div class="gallery" style={`--gallery-min:${min}`} data-ratio={ratioClass(blok.ratio)}>
+        {images.map((item) => <StoryblokComponent blok={item} ratio={blok.ratio} />)}
+      </div>
+    </div>
+  </section>
+)}

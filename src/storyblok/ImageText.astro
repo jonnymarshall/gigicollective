@@ -1,0 +1,33 @@
+---
+import { storyblokEditable, renderRichText } from '@storyblok/astro';
+import type { SbBlokData } from '@storyblok/astro';
+import { blockClasses, assetUrl, assetAlt, ratioClass } from '../lib/blok-style';
+
+interface Props { blok: SbBlokData }
+const { blok } = Astro.props;
+
+const image = assetUrl(blok.image);
+const html = blok.body ? renderRichText(blok.body as any) : '';
+const flip = blok.image_side === 'left';
+---
+<section {...storyblokEditable(blok)} class={blockClasses(blok, 'block--imagetext')}>
+  <div class="wrap">
+    <!-- Without an image there is nothing to sit beside, so drop to one column
+         rather than leaving half the row empty. -->
+    <div class={image ? `split ${flip ? 'split--flip' : ''}` : 'prose'}>
+      <div>
+        {blok.eyebrow && <p class="eyebrow">{blok.eyebrow}</p>}
+        {blok.heading && <h2>{blok.heading}</h2>}
+        {html && <div set:html={html} />}
+        {blok.button_label && blok.button_link && (
+          <p style="margin-top:2rem">
+            <a class="button button--ghost" href={String(blok.button_link)}>{blok.button_label}</a>
+          </p>
+        )}
+      </div>
+      {image && (
+        <img class={ratioClass(blok.image_ratio)} src={image} alt={assetAlt(blok.image)} loading="lazy" />
+      )}
+    </div>
+  </div>
+</section>

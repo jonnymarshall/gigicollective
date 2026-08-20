@@ -1,0 +1,16 @@
+---
+import { storyblokEditable } from '@storyblok/astro';
+import type { SbBlokData } from '@storyblok/astro';
+import { assetUrl, assetAlt } from '../lib/blok-style';
+
+interface Props { blok: SbBlokData; index?: number; numbered?: boolean }
+const { blok, index = 0, numbered = false } = Astro.props;
+const image = assetUrl(blok.image);
+---
+<div {...storyblokEditable(blok)}>
+  {numbered
+    ? <span class="column-set__num">{String(index + 1).padStart(2, '0')}</span>
+    : image && <img class="column-set__icon" src={image} alt={assetAlt(blok.image)} loading="lazy" />}
+  {blok.title && <h3>{blok.title}</h3>}
+  {blok.body && <p>{blok.body}</p>}
+</div>

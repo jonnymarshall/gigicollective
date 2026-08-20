@@ -1,43 +1,76 @@
 ---
 import { getCollection, render } from 'astro:content';
+import StoryblokComponent from '@storyblok/astro/StoryblokComponent.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Blocks from '../components/Blocks.astro';
+import { getStoryblokPages } from '../lib/pages';
 
 export async function getStaticPaths() {
-  const pages = await getCollection('pages', ({ data }) => !data.draft);
-  return pages.map((page) => ({ params: { slug: page.id }, props: { page } }));
+  const storyblokPages = await getStoryblokPages();
+  const markdownPages = await getCollection('pages', ({ data }) => !data.draft);
+
+  // Storyblok wins where a slug exists in both, so moving a page across is a
+  // single action in the CMS with no gap where the page disappears.
+  const claimed = new Set(storyblokPages.map((p) => p.slug));
+
+  return [
+    ...storyblokPages.map((page) => ({
+      params: { slug: page.slug || undefined },
+      props: { source: 'storyblok' as const, page },
+    })),
+    ...markdownPages
+      .filter((entry) => !claimed.has(entry.id))
+      .map((entry) => ({
+        params: { slug: entry.id },
+        props: { source: 'markdown' as const, entry },
+      })),
+  ];
 }
 
-const { page } = Astro.props;
+const props = Astro.props;
 
-// Anything typed into the markdown body still renders below the sections, so
-// pages written before sections existed keep working rather than going blank.
-const { Content } = await render(page);
-const hasBlocks = page.data.blocks.length > 0;
+let title: string | undefined;
+let description: string | undefined;
+let heroImage: string | undefined;
+let Content: Awaited<ReturnType<typeof render>>['Content'] | undefined;
+let hasBlocks = false;
+
+if (props.source === 'markdown') {
+  const rendered = await render(props.entry);
+  Content = rendered.Content;
+  title = props.entry.data.title;
+  description = props.entry.data.description;
+  heroImage = props.entry.data.heroImage || undefined;
+  hasBlocks = props.entry.data.blocks.length > 0;
+} else {
+  title = props.page.name;
+  description = (props.page.story.content.seo_description as string) || undefined;
+}
 ---
 
-<BaseLayout
-  title={page.data.title}
-  description={page.data.description}
-  image={page.data.heroImage || undefined}
-  overlayHeader
->
-  <article id={`page-${page.id}`}>
-    <header class="page-head">
-      <div class="wrap">
-        <h1 class="display">{page.data.title}</h1>
-        {page.data.description && <p class="lead" style="margin-top:1.5rem">{page.data.description}</p>}
-      </div>
-    </header>
+{props.source === 'storyblok' ? (
+  <BaseLayout title={title} description={description} overlayHeader>
+    <StoryblokComponent blok={props.page.story.content} />
+  </BaseLayout>
+) : (
+  <BaseLayout title={title} description={description} image={heroImage} overlayHeader>
+    <article id={`page-${props.entry.id}`}>
+      <header class="page-head">
+        <div class="wrap">
+          <h1 class="display">{title}</h1>
+          {description && <p class="lead" style="margin-top:1.5rem">{description}</p>}
+        </div>
+      </header>
 
-    {page.data.heroImage && (
-      <img src={page.data.heroImage} alt="" style="width:100%;max-height:60vh;object-fit:cover" />
-    )}
+      {heroImage && (
+        <img src={heroImage} alt="" style="width:100%;max-height:60vh;object-fit:cover" />
+      )}
 
-    <Blocks blocks={page.data.blocks} />
+      <Blocks blocks={props.entry.data.blocks} />
 
-    {!hasBlocks && (
-      <div class="band band--bg"><div class="wrap"><div class="prose"><Content /></div></div></div>
-    )}
-  </article>
-</BaseLayout>
+      {!hasBlocks && Content && (
+        <div class="band band--bg"><div class="wrap"><div class="prose"><Content /></div></div></div>
+      )}
+    </article>
+  </BaseLayout>
+)}
