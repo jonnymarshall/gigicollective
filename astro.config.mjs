@@ -17,33 +17,34 @@ export default defineConfig({
 
     // Content is authored in Storyblok. The markdown collections still work
     // alongside this while the migration is in progress; see src/lib/pages.ts.
-    ...(storyblokToken
-      ? [
-          storyblok({
-            accessToken: storyblokToken,
-            apiOptions: { region: 'eu' },
-            bridge: true,
-            componentsDir: 'src',
-            enableFallbackComponent: true,
-            customFallbackComponent: 'storyblok/UnknownBlock',
-            components: {
-              page: 'storyblok/Page',
-              hero: 'storyblok/Hero',
-              text: 'storyblok/Text',
-              image_text: 'storyblok/ImageText',
-              image: 'storyblok/Image',
-              gallery: 'storyblok/Gallery',
-              gallery_item: 'storyblok/GalleryItem',
-              quote: 'storyblok/Quote',
-              cta: 'storyblok/Cta',
-              cards: 'storyblok/Cards',
-              card: 'storyblok/Card',
-              columns: 'storyblok/Columns',
-              spacer: 'storyblok/Spacer',
-            },
-          }),
-        ]
-      : []),
+    //
+    // Registered unconditionally, even with no token. It provides the
+    // `virtual:storyblok-options` module that StoryblokComponent imports, and
+    // making it conditional breaks the build wherever the token is absent
+    // rather than degrading gracefully. Fetching is what handles a bad token.
+    storyblok({
+      accessToken: storyblokToken ?? '',
+      apiOptions: { region: 'eu' },
+      bridge: true,
+      componentsDir: 'src',
+      enableFallbackComponent: true,
+      customFallbackComponent: 'storyblok/UnknownBlock',
+      components: {
+        page: 'storyblok/Page',
+        hero: 'storyblok/Hero',
+        text: 'storyblok/Text',
+        image_text: 'storyblok/ImageText',
+        image: 'storyblok/Image',
+        gallery: 'storyblok/Gallery',
+        gallery_item: 'storyblok/GalleryItem',
+        quote: 'storyblok/Quote',
+        cta: 'storyblok/Cta',
+        cards: 'storyblok/Cards',
+        card: 'storyblok/Card',
+        columns: 'storyblok/Columns',
+        spacer: 'storyblok/Spacer',
+      },
+    }),
   ],
 
   // Fonts are downloaded at build time and served from our own domain, so there
