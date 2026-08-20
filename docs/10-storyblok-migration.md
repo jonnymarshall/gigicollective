@@ -94,6 +94,48 @@ environment file in the project root, which is already git-ignored:
 The three variable names the scripts expect are `STORYBLOK_SPACE_ID`,
 `STORYBLOK_PREVIEW_TOKEN` and `STORYBLOK_MANAGEMENT_TOKEN`.
 
+### Scopes for the personal access token
+
+Storyblok tokens are scoped per resource, and Storyblok's own advice is least
+privilege. The push script only ever touches components:
+
+```
+GET   spaces/{id}/components
+POST  spaces/{id}/components
+PUT   spaces/{id}/components/{id}
+```
+
+So tick **Components** and nothing else. Not Stories, not Users, not Spaces.
+
+For **Space access**, choose **Only selected spaces** and pick the Gigi Collective
+space rather than leaving it on All spaces.
+
+If the token leaks, the worst anyone can do is rearrange the section definitions
+in one space, which is a five minute fix by re-running the push script. A token
+with Stories access could rewrite her content; one with Users could add people to
+the account.
+
+### A second, separate token for the backup job
+
+The content backup (step 6) runs in GitHub Actions and needs to read stories and
+assets, which the components token deliberately cannot do.
+
+Make a **separate** token for it at that point, scoped to **Stories** and
+**Assets**, restricted to the same space. Two reasons to keep them apart:
+
+- The CI token lives as a GitHub secret and is exposed to every workflow run. The
+  components token stays on your laptop.
+- Storyblok's scopes are read and write together, not read alone, so a Stories
+  token can also change her content. Fewer places that token exists, the better.
+
+Do not reuse one token for both.
+
+### One deadline worth knowing
+
+Storyblok made scoped tokens the default in May 2026 and will revoke all remaining
+unscoped tokens on **30 November 2026**. Anything created now is scoped anyway, so
+this only matters if an old token turns up somewhere.
+
 **3. Tell me when that file exists** and I will push the schema and rewire the site.
 
 ---
