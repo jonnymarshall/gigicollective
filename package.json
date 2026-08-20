@@ -14,7 +14,8 @@
     "astro": "astro",
     "check:cms": "node scripts/check-cms-config.mjs",
     "storyblok:push": "node scripts/push-storyblok-schema.mjs",
-    "storyblok:check": "node scripts/push-storyblok-schema.mjs --dry-run"
+    "storyblok:check": "node scripts/push-storyblok-schema.mjs --dry-run",
+    "storyblok:doctor": "node scripts/storyblok-doctor.mjs"
   },
   "dependencies": {
     "@astrojs/rss": "^4.0.19",

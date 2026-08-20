@@ -12,6 +12,15 @@
 import StoryblokClient from 'storyblok-js-client';
 import { components } from '../storyblok/schema.mjs';
 
+// Load the local environment file if there is one, so the credentials never have
+// to be typed onto a command line where they would land in shell history.
+try {
+  process.loadEnvFile();
+} catch {
+  // No local file. Fall back to whatever is already in the environment, which is
+  // how this runs in CI.
+}
+
 const spaceId = process.env.STORYBLOK_SPACE_ID;
 const token = process.env.STORYBLOK_MANAGEMENT_TOKEN;
 const dryRun = process.argv.includes('--dry-run');
