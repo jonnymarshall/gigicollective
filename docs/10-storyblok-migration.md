@@ -96,39 +96,45 @@ The three variable names the scripts expect are `STORYBLOK_SPACE_ID`,
 
 ### Scopes for the personal access token
 
-Storyblok tokens are scoped per resource, and Storyblok's own advice is least
-privilege. The push script only ever touches components:
+Each scope expands into individual permissions, on a read / write / publish
+ladder. Some have all three, some only read. Tick the specific ones, not the
+group.
+
+The push script only ever touches components:
 
 ```
-GET   spaces/{id}/components
-POST  spaces/{id}/components
-PUT   spaces/{id}/components/{id}
+GET   spaces/{id}/components     needs Components: read
+POST  spaces/{id}/components     needs Components: write
+PUT   spaces/{id}/components/{id}  needs Components: write
 ```
 
-So tick **Components** and nothing else. Not Stories, not Users, not Spaces.
+So: **Components, both read and write. Every other scope left untouched.**
 
 For **Space access**, choose **Only selected spaces** and pick the Gigi Collective
 space rather than leaving it on All spaces.
 
-If the token leaks, the worst anyone can do is rearrange the section definitions
-in one space, which is a five minute fix by re-running the push script. A token
-with Stories access could rewrite her content; one with Users could add people to
-the account.
+If this token leaks, the worst anyone can do is rearrange the section definitions
+in one space, which is a five minute fix by re-running the push script. It cannot
+read or alter a single word of her content.
 
 ### A second, separate token for the backup job
 
 The content backup (step 6) runs in GitHub Actions and needs to read stories and
 assets, which the components token deliberately cannot do.
 
-Make a **separate** token for it at that point, scoped to **Stories** and
-**Assets**, restricted to the same space. Two reasons to keep them apart:
+Make a **separate** token at that point, with **read only** and nothing else:
 
-- The CI token lives as a GitHub secret and is exposed to every workflow run. The
-  components token stays on your laptop.
-- Storyblok's scopes are read and write together, not read alone, so a Stories
-  token can also change her content. Fewer places that token exists, the better.
+| Scope | Permission |
+|---|---|
+| Stories | read |
+| Assets | read |
 
-Do not reuse one token for both.
+Not write. Not publish. A backup only ever reads, so a token that can write is a
+token that can corrupt the thing it is meant to protect.
+
+Keep the two tokens apart. The CI token lives as a GitHub secret and is exposed to
+every workflow run, while the components token stays on your laptop. Neither needs
+what the other has.
 
 ### One deadline worth knowing
 
